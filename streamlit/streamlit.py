@@ -207,10 +207,10 @@ def main():
   # df_w_pms
   st.dataframe(df_w_pms.describe())
 
-  "# might need a static image for seaborn and refer back to the notebook..."
-  plt.rc('figure', figsize=(25, 10))
-  fig = sb.heatmap(df_w_pms.corr(method='pearson'), cmap='YlGnBu', annot=True)
-  st.plt(fig)
+#   "# might need a static image for seaborn and refer back to the notebook..."
+#   plt.rc('figure', figsize=(25, 10))
+#   fig = sb.heatmap(df_w_pms.corr(method='pearson'), cmap='YlGnBu', annot=True)
+#   st.plt(fig)
 
   st.markdown(
       """We also ran an initial clustering analysis of the nodes based on the types of sensors at each location. A sparse matrix for each node with the sensor types as the values was used.  The sensor types were limited to only the subsystem types that include air quality metrics.  The histogram below shows the clusters identified using agglomerative clustering with a distance threshold of 15.  """
