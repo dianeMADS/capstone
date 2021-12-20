@@ -293,7 +293,7 @@ def main():
   )
   df.date = pd.to_datetime(df.date)
 
-  base = alt.Chart(df).mark_line().encode(x = 'date:T').properties(width=250, height=250)#.interactive()
+  base = alt.Chart(df).mark_line().encode(x = 'date:T').properties(width=200, height=200)#.interactive()
   chart = alt.vconcat()
 
   row = alt.hconcat()
@@ -378,7 +378,7 @@ def main():
   pred_df['type'] = 'predictions'
   plot_df = plot_df.append(pred_df)
 
-  base = alt.Chart(plot_df).mark_line().encode(x = 'date:T', color='type').properties(width=250, height=250)
+  base = alt.Chart(plot_df).mark_line().encode(x = 'date:T', color='type').properties(width=200, height=200)
 
   chart = alt.vconcat()
 
@@ -416,7 +416,7 @@ def main():
   control_df['type'] = 'control'
   causal_df = causal_df.append(control_df)
 
-  base = alt.Chart(causal_df).mark_line().encode(x = 'date:T', color='type').properties(width=250, height=250)
+  base = alt.Chart(causal_df).mark_line().encode(x = 'date:T', color='type').properties(width=200, height=200)
 
   chart = alt.vconcat()
 
@@ -437,10 +437,10 @@ def main():
   st.header("IV. Cluster Analysis")
   
   st.markdown(
-      """Node clustering seemed like an obvious choice for analysis with similar data being collected around the city.  We were expecting to find some similarity between nodes with each metric that may indicate differences or similarities between neighborhoods that are not physically close to each other.  The focus of this analysis is on the air quality metrics based on the concentrations of selected gasses.  This analysis does not explore what is “good” vs “bad” air quality, it instead focuses on identifying similar concentration levels of gasses over time. The results of this analysis may be interesting to correlate with other metrics such as income maps, housing prices, zoning (ex. business vs residential areas), and heath maps."""
+      """Node clustering seemed like an obvious choice for analysis with similar data being collected around the city.  We were expecting to find some similarity between nodes with each metric that may indicate differences or similarities between neighborhoods that are not physically close to each other.  The focus of this analysis is on the air quality metrics based on the concentrations of selected gasses.  This analysis does not explore what is “good” vs “bad” air quality, it instead focuses on identifying similar concentration levels of gasses over time. Our primary idea was to verify if the conclusions remain the same when applying our causal inference model per cluster, knowing that some areas of the city may have better gaze concentration than others under normal circumstances. The results of this analysis may also be interesting to correlate with other metrics such as income maps, housing prices, zoning (ex. business vs residential areas), and heath maps."""
   )
   st.markdown(
-      """Two representation for the data were used to compare results.  The first representation averages the data over each day of the week.  The motivation for this comes from the assumption that there are differences in behavior on each weekday that may influence concentrations of gasses in the air such as differences between workday and weekend traffic (shape (number of nodes, 7 * parameters)).  The second representation averages all the values by date, combining the date in previous years together (shape = (number of nodes, 366*parameters)). Both representations do not include data collected during the lockdowns to prevent any lockdown related fluctuations from skewing the results.  Both data representations have their benefits.  The weekly representation reduces the daily noise significantly but loses much of the trends over the year that may be important for cluster separation.  The date representation maintains much of the trends but will place more weight on noisy data.  This representation also gives null values more weight since they must be treated as zeros."""
+      """Two representation for the data were used to compare results.  The first representation averages the data over each day of the week.  The motivation for this comes from the assumption that there are differences in behavior on each weekday that may influence concentrations of gasses in the air such as differences between workday and weekend traffic (shape (number of nodes, 7 x parameters)).  The second representation averages all the values by date, combining the date in previous years together (shape = (number of nodes, 366 x parameters)). Both representations do not include data collected during the lockdowns to prevent any lockdown related fluctuations from skewing the results.  Both data representations have their benefits.  The weekly representation reduces the daily noise significantly but loses much of the trends over the year that may be important for cluster separation.  The date representation maintains much of the trends but will place more weight on noisy data.  This representation also gives null values more weight since they must be treated as zeros."""
   )
   st.markdown(
       """Agglomerative clustering was used as our baseline algorithm to compare the other methods to.  This method provides the most direct control over the groupings and is the easiest to modify.  Due to the large daily fluctuations, we defined the number of clusters to be 5 instead of tuning for the distance threshold.  DBSCAN and OPTICS rely on identifying groupings of clusters.  These algorithms also identify noise points that are between clusters.  DBSCAN proved extremely difficult to generate reliable clusters.  Most of the runs produced a single cluster and noise points.  OPTICS is a generalized version of DBSCAN and was able to provide better results.  The spectral clustering algorithm had two clusters specified with the radial basis function as the affinity matrix.  Finally, affinity propagation was run as it attempts to determine how close two nodes are to being copies. This algorithm used the preset values suggested by the sklearn documentation with Euclidean distance in the affinity matrix."""
@@ -476,7 +476,7 @@ def main():
   st.markdown(
       """For the agglomerative clustering, it appears that there are differences in the cluster groups that are clear in the average time series for each cluster especially between 2019 and 2020. The blue (0) cluster group has far greater variance than the orange (4) cluster.  We can also see that the blue cluster does not continue into 2021. In the map, we can see that most of the nodes belong to a single cluster.   The smallest clusters appear to be the least consistent sensors and have many data gaps or were only active for a short period of time. It appears that the clusters may have only separated based on measurement consistency.  Further analysis is required to understand why these nodes are producing noisier data.  It is unclear if this is due to a faulty sensor or if there are local sources of pollution that cause the spikes.  Future projects could compare these clusters to traffic patterns and industrial centers that could be producers.  It would also be beneficial to include more variables such as wind speed and direction that have an impact on the direction of pollution plume movement.  """
   )
-  st.image(Image.open('streamlit/data/AgglomerativeClusters.jpg'), caption='Agglomorative Clusters')
+  st.image(Image.open('streamlit/data/AgglomerativeClusters.jpg'), caption='Agglomorative Clusters', width=1200)
 
   
   st.header("V. Possible Future Directions")
