@@ -308,10 +308,26 @@ def main():
 
   st.subheader("""VAR Model""")
   st.markdown(
-      """The vector autoregressor has the advantage to ."""
+      """We would like to use pre-lockdown (i.e. before March 21st, 2020) measurements to predict values during lockdown. Before doing so, it is important to validate the prediction model to be used; this implies temporarily reserving a small portion of the training set, here January 1st to March 20th 2020, while keeping anything before January 2020 strictly for training."""
+  )
+  st.markdown(
+    """On the other hand, there are seven features to predict, one for each type of gaze; the features in question are timeseries and are expected to be somehow correlated to each other. Vector autoregression (VAR) method fits such mandate pretty well, and is quite simple to apply with a single hyper-parameter p (the causal inference notebook provides details on p tuning in our case).
+    
+    The visualization below plots prediction values for the validation set, against actual measurements in blue."""
   )
  
  
+  st.subheader("""Causal Analysis""")
+  st.markdown(
+    """After the above training & validation, we are more confident to train our VAR model over the entire period before lockdown on March 21st, 2020. Then we use the fitted model to predict air quality gaze concentrations during lockdown from March 21st to May 31st 2020."""
+  )
+  st.markdown(
+    """In the results below, predictions in blue represent what would have happened between March 21st and May 31st 2020 without lockdown. The comparison of those with actual lockdown measurements in orange shows orange below blue for most gazes, suggesting an improvement of air quality gazes during lockdown. Interestingly, so2 concentration does not follow this logic; litterature indicatest that so2 mainly results from home pollution (e.g. gazes from oven when cooking) on the contrary of the other six gazes. So with people being mostly at home during lockdown it is logic that so2 did not improve during lockdown."""
+  )
+  st.markdown(
+    """However, we should not conclude so fast without nore investigations. Data for air quality gaze concentrations are really volatile; our attempt to add confidence intervals around forecast values need more refining as shown in the notebook. We also believe that a deep learning model like LSTM would provide more robust predictions given the nature of the data."""
+  )
+    
   training_df = df[df['date'] < '2020-01-01']
 #   training_df
   validation_df = df[(df['date'] >= '2020-01-01') & (df['date'] < '2020-03-21')]
