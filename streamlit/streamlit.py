@@ -128,7 +128,7 @@ def main():
 
   base = alt.Chart(up_df).encode(
       alt.X('node_id:N')
-  ).properties(width = 1500)
+  ).properties(width = 1000, height = 500)
 
   rule = base.mark_rule().encode(
       alt.Y('start:T', axis = alt.Axis(format='%m/%y', title='Date')), #,labelAngle=-45
@@ -147,6 +147,72 @@ def main():
 
   st.altair_chart(rule + startpoints + endpoints)
 
+
+  st.markdown('\n\n')
+  st.markdown('node sensor types')
+
+  subsystem_types = master_df[['node_id', 'subsystem']].groupby(['node_id', 'subsystem']).count().reset_index()
+  subsystem_types['count'] = 1
+
+
+  sensor_chart = alt.Chart(subsystem_types).mark_tick().encode(
+    x='node_id',
+    y='subsystem',
+    color='subsystem'
+  ).properties(width=1400) #, height=250
+  st.altair_chart(sensor_chart)
+
+
+  st.markdown('\n\n')
+  st.markdown('sensors')
+  subsystem_sensor_types = master_df[['subsystem', 'sensor']].groupby(['subsystem', 'sensor']).count().reset_index()
+  subsystem_types['count'] = 1
+
+  subsystem_chart = alt.Chart(subsystem_sensor_types).mark_rect().encode(
+    x='sensor',
+    y='subsystem',
+    # color='subsystem'
+  ).properties(width=1400)
+  st.altair_chart(subsystem_chart)
+
+  filtered_subsystems = master_df[master_df['subsystem'].isin(['lightsense', 'metsense', 'chemsense', 'alphasense', 'plantower'])]
+  subsystem_sensor_types = filtered_subsystems[['subsystem', 'sensor']].groupby(['subsystem', 'sensor']).count().reset_index()
+  subsystem_types['count'] = 1
+
+  filteredsub_chart = alt.Chart(subsystem_sensor_types).mark_rect().encode(
+    x='sensor',
+    y='subsystem',
+    color='subsystem'
+  ).properties(width=1400)
+  st.altair_chart(filteredsub_chart)
+
+  sensor_types_parameters = filtered_subsystems[['subsystem', 'sensor', 'parameters']].groupby(['subsystem', 'sensor', 'parameters']).count().reset_index()
+  sensor_types_parameters['count'] = 1
+
+  param_chart = alt.Chart(sensor_types_parameters).mark_rect().encode(
+    x='parameters',
+    y='sensor',
+    color='subsystem'
+  ).properties(width=1000, height=500)
+  st.altair_chart(param_chart)
+
+  st.dataframe(filtered_subsystems.head())
+
+
+  pms = ['10um_particle', '1um_particle', '2_5um_particle', '5um_particle', 'pm1', 'pm10', 'pm10_atm', 'pm10_cf1', 'pm1_atm', 'pm1_cf1', 'pm25_atm', 'pm25_cf1', 'pm2_5', 'point_3um_particle', 'point_5um_particle', 'fw', 'sample_flow_rate', 'sampling_period']
+  # 'concentration', 
+  df_w_pms = filtered_subsystems[filtered_subsystems['parameters'].isin(pms) ].drop(['node_id', 'subsystem', 'sensor'], axis=1)
+
+  df_w_pms = pd.pivot_table(df_w_pms, values = 'values', index = 'date', columns = 'parameters', aggfunc=np.mean).reset_index()
+  # df_w_pms = df_w_pms.fillna(method="bfill")
+
+  # df_w_pms
+  st.dataframe(df_w_pms.describe())
+
+  "# might need a static image for seaborn and refer back to the notebook..."
+  fig = plt.rc('figure', figsize=(25, 10))
+  sb.heatmap(df_w_pms.corr(method='pearson'), cmap='YlGnBu', annot=True)
+  st.write(fig)
 
 
 
