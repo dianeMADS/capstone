@@ -102,7 +102,7 @@ def main():
   """The first step of our data exploration was to look at the node distribution across the city. The map below shows node locations based on their latitude and longitude. The coverage is a very good across the city of Chicago, with a good chunk of nodes along the coast of Lake Michigan. This exercise suggests some clustering for the upcoming analysis; we actually expect air quality to better around the lake than it is within the inner city, especially around industrial zones."""
   )
   latlon = list(zip(nodes['lat'], nodes['lon'], nodes['node_id']))
-  mapit = folium.Map( location=[41.85, -87.65], zoom_start=11, width = 1000, height = 1000)
+  mapit = folium.Map( location=[41.85, -87.65], zoom_start=11, width = 600, height = 600)
 
   for coord in latlon:
     folium.Marker( location=[ coord[0], coord[1] ],
@@ -476,7 +476,7 @@ def main():
   st.markdown(
       """For the agglomerative clustering, it appears that there are differences in the cluster groups that are clear in the average time series for each cluster especially between 2019 and 2020. The blue (0) cluster group has far greater variance than the orange (4) cluster.  We can also see that the blue cluster does not continue into 2021. In the map, we can see that most of the nodes belong to a single cluster.   The smallest clusters appear to be the least consistent sensors and have many data gaps or were only active for a short period of time. It appears that the clusters may have only separated based on measurement consistency.  Further analysis is required to understand why these nodes are producing noisier data.  It is unclear if this is due to a faulty sensor or if there are local sources of pollution that cause the spikes.  Future projects could compare these clusters to traffic patterns and industrial centers that could be producers.  It would also be beneficial to include more variables such as wind speed and direction that have an impact on the direction of pollution plume movement.  """
   )
-  st.image(Image.open('streamlit/data/AgglomerativeClusters.jpg'), caption='Agglomorative Clusters', width=600)
+  st.image(Image.open('streamlit/data/AgglomerativeClusters.jpg'), caption='Agglomorative Clusters', width=500)
 
   
   st.header("V. Possible Future Directions")
