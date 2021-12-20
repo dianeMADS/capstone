@@ -273,7 +273,7 @@ def main():
   
   st.subheader('Data')
   st.markdown(
-      """The following table shows a sample of the slice of data used for causal inference. Those are pivoted around parameters to have air quality gazes as features and measurements as observations."""
+      """The following table shows a sample of the slice of data used for causal inference. Those are pivoted around parameters to have air quality gazes as features and measurements as observations. The next table complements the previous one with some statistics around air gaze timeseries."""
   )
   df = filtered_subsystems[filtered_subsystems['parameters'] == 'concentration'].drop(['node_id', 'subsystem', 'parameters'], axis=1)
 #   st.dataframe(df.head())
@@ -281,11 +281,10 @@ def main():
   # df = df.fillna(method="bfill")
   st.dataframe(df.head())
     
-  st.markdown(
-    """Table below complements the previous one with some statistics around air gaze timeseries."""
-  )
+  st.markdown('\n\n')
   st.dataframe(df.describe())
 
+  st.markdown('\n\n')
   st.markdown(
     """For illustration, here are some plots to show historical trends for air quality gaze concentrations. We see that data a really volatile, with some peaks that from our understanding correspond to moments when sensors were not functional."""
   )
@@ -307,9 +306,9 @@ def main():
   st.altair_chart(chart)
  
 
-  st.subheader("""Vector Autoregression (VAR) Model""")
+  st.subheader("""VAR Model""")
   st.markdown(
-      """."""
+      """The vector autoregressor has the advantage to ."""
   )
  
  
