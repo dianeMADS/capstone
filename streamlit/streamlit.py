@@ -75,19 +75,19 @@ def main():
       """The process we used is only possible with the data was already sorted by ascending date.  The entire code can be found on our GitHub page.   The process was to first assign a thread to read a file.  The first line in the file becomes the start time rounded to the nearest half hour rounded down (ex 4:15 would have a start time at 3:30 and 4:45 would have a start time of 4:30) and the end time is the start time plus one hour.  A dictionary of values with the parameter, subsensor, and system as the key and the total for each as the values was then created.  Once the timestamp is greater than the end time or there are no more lines in the file to read, the thread takes the mean value for each key and appends it to a new csv file with the node id.  The values are cleared and the thread continues if there are more values in the file or moves on to the next file.  The entire process takes about 30 minutes to run, and we were able to reduce the size of the entire dataset from 300 GB down to 1.8 GB.  This size is near the limits for pandas but proved to be manageable after filtering by metrics for each analysis."""
   )
 
-  st.markdown("data from one node")
+  st.subheader("Sample Data from One Single Node")
   sample_data = pd.read_csv('streamlit/data/Numeric_001e06112e77.csv')
   st.dataframe(sample_data.head())
 
-  st.markdown("master dafaframe")
+  st.subheader('Master Dataframe (daily aggregation)')
   master_df = pd.read_csv("streamlit/data/cleaned_dataset.zip")
   st.dataframe(master_df.head())
 
-  st.markdown('nodes')
+  st.subheader('Nodes Information')
   nodes = pd.read_csv("streamlit/data/nodes.csv")
   st.dataframe(nodes.head())
 
-  st.markdown('sensors')
+  st.subheader('Sensors Information')
   sensors = pd.read_csv('streamlit/data/sensors.csv')
   st.dataframe(sensors.head())
 
@@ -97,9 +97,7 @@ def main():
       """Once the data was reduced to hourly readings, we were able to explore the data using pandas.  Our initial exploration provided us with locations of the sensors and the time frame that each sensor was active.  With this information, we decided to modify our initial plan of focusing on quality of life to focus instead on a causal inference model comparing how trends in air quality changed due to Covid related lockdowns in the city."""
   )
   
-
-
-  st.markdown('node locations')
+  st.subheader('Node Locations')
   st.write(
   """The first step of our data exploration was to look at the node distribution across the city. The map below shows node locations based on their latitude and longitude; there is a very good coverage of the city of Chicago, with a good bunch of nodes along the coast of Lake Michigan. This exercise suggests some clustering for the upcoming analysis, since we expect air quality to better close to the lake than it is in the city, especially in industrial zones."""
   )
@@ -117,7 +115,7 @@ def main():
 
 
   st.markdown('\n\n')
-  st.markdown('time for data collection')
+  st.subheader('Collection Period of Time')
   st.write(
       """The city of Chicago AoT website reported that nodes were commissioned and decommissioned between 2017 and 2020. Further than commissioning/decommissioning period of times, the plot below indicates exactly when data collection started and ended for the given nodes. We notice lots of inconsistencies among nodes, with recording times going from 0 to 1112 days for an average of 416 days. It is difficult to envisage a per node study, otherwise many if not most of the nodes will not have enough data for a decent analysis of the periods before covid-19 (i.e. from the commissioning to March 20th, 2020) and lockdown from March 21st to May 31st 2020."""
   )
@@ -133,10 +131,10 @@ def main():
     idx += 1
 
   up_df['days_up'] = (up_df.end.dt.date - up_df.start.dt.date).dt.days
-  st.dataframe(up_df.head())
+#   st.dataframe(up_df.head())
 
   st.markdown('time for data collection, description ...')
-  st.dataframe(up_df.describe().T)  
+#   st.dataframe(up_df.describe().T)  
 
   base = alt.Chart(up_df).encode(
       alt.X('node_id:N')
@@ -161,7 +159,7 @@ def main():
 
 
   st.markdown('\n\n')
-  st.markdown('node sensor types')
+  st.subheader('Subsystem Types')
   st.markdown(
     """Another important aspect of the city of Chicago AoT dataset is that nodes comprise a set of sensor subsystems that might differ from one node to the other. The visualization below shows ten different types of subsystems and indicates whether they are present in given AoT nodes. All 118 nodes (i.e. except one) comprise lightsense and meltsense that collect meteorological and a few environmental data. Out of those 118 nodes, 94 contain a chemsense to record air quality gaze concentrations. It is noticeable that most of the nodes (but three) that have an alphasense do not have a plantower and vice versa, both types collecting air quality particle counts. Our assumption is that plantower and alphasense are two versions of the same type of subsystem."""
   )
@@ -182,7 +180,7 @@ def main():
 
 
   st.markdown('\n\n')
-  st.markdown('sensors')
+  st.subheader('Sensors')
   st.markdown(
     """Going deeper in the node examination, we finally looked at the actual metrics collected per sensor for the selected set of subsystems. In the visualization below, the six subsystems under consideration are color-coded, y-axis identifies sensors and x-axis gives corresponding parameters. Parameters related to pollution are (i) concentration from every gaze present in chemsense, (ii) and particles from plantower and alphasense. In order to simplify this first look at AoT, we limited our causal inference analysis to those air quality attributes."""
   )
@@ -220,7 +218,7 @@ def main():
 
 
   st.markdown('\n\n')
-  st.markdown('* Particles count')
+  st.subheader('Particle Counts')
   st.markdown(
     """Before closing data wrangling, we needed to aggregate data from alphasense and plantower under our prior assumption that they are two versions of the same type of sensors. Three types of particles retain our attention: pm1, pm25 and pm10. The table below provides a description of related time series for the two types of sensors showing a huge difference between them: e.g. pm1 from alphasense vs. 1um_particle, pm1_atm and pm1_cf1 from plantower."""
   )
@@ -249,7 +247,7 @@ def main():
 
 
   st.markdown('\n\n')
-  st.markdown('Initial clustering')
+  st.subheader('Initial clustering')
   st.markdown(
       """We also ran an initial clustering analysis of the nodes based on the types of sensors at each location. A sparse matrix for each node with the sensor types as the values was used.  The sensor types were limited to only the subsystem types that include air quality metrics.  The histogram below shows the clusters identified using agglomerative clustering with a distance threshold of 15.  """
   )
@@ -405,9 +403,6 @@ def main():
   st.markdown(
     """However, we should not conclude so fast without nore investigations. Data for air quality gaze concentrations are really volatile; our attempt to add confidence intervals around forecast values need more refining as shown in the notebook. We also believe that a deep learning model like LSTM would provide more robust predictions given the nature of the data."""
   )
-  st.markdown(
-      """."""
-  )
  
 
   control_df = var_first_diff(df[df['date'] < '2020-03-21'].set_index('date'), 20, 72)[1].reset_index().rename(columns={'index':'date'})
@@ -439,17 +434,7 @@ def main():
   st.altair_chart(chart)
   
 
-  st.markdown(
-      """."""
-  )
- 
-
-  st.markdown(
-      """."""
-  )
-
-
-    
+  st.markdown('\n\n')
   st.header("Cluster Analysis")
   
   st.markdown(
