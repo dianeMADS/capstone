@@ -1,0 +1,8 @@
+numpy
+pandas
+folium
+altair
+matplotlib
+Pillow
+seaborn
+statsmodels
