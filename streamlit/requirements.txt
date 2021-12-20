@@ -6,3 +6,4 @@ matplotlib
 Pillow
 seaborn
 statsmodels
+streamlit_folium
