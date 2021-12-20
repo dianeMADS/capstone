@@ -128,7 +128,7 @@ def main():
 
   base = alt.Chart(up_df).encode(
       alt.X('node_id:N')
-  ).properties(width = 1000, height = 500)
+  ).properties(width = 1400, height = 350)
 
   rule = base.mark_rule().encode(
       alt.Y('start:T', axis = alt.Axis(format='%m/%y', title='Date')), #,labelAngle=-45
@@ -193,7 +193,7 @@ def main():
     x='parameters',
     y='sensor',
     color='subsystem'
-  ).properties(width=1000, height=500)
+  ).properties(width=1400, height=500)
   st.altair_chart(param_chart)
 
   st.dataframe(filtered_subsystems.head())
@@ -212,7 +212,7 @@ def main():
   "# might need a static image for seaborn and refer back to the notebook..."
   fig = plt.rc('figure', figsize=(25, 10))
   sb.heatmap(df_w_pms.corr(method='pearson'), cmap='YlGnBu', annot=True)
-  st.write(fig)
+  st.plt(fig)
 
 
 
