@@ -7,8 +7,28 @@ Original file is located at
     https://colab.research.google.com/drive/1PNepn-yeKr3KDAexRLmP0zaBsaichYbp
 """
 
-# import module
 import streamlit as st
+import pandas as pd
+import numpy as np
+
+import gzip
+from google.colab import drive
+import os
+
+from PIL import Image
+
+import matplotlib.pyplot as plt
+import altair as alt
+# from streamlit_folium import folium_static
+import folium
+import seaborn as sb
+
+from statsmodels.tsa.api import VAR
+from statsmodels.tsa.vector_ar.var_model import VARResults, VARResultsWrapper
  
+# # Suppress warnings
+# import warnings
+# from statsmodels.tools.sm_exceptions import ValueWarning
+# warnings.simplefilter("ignore", ValueWarning) 
 # Title
 st.title("Hello GeeksForGeeks !!!")
