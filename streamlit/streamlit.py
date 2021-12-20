@@ -322,32 +322,32 @@ def main():
     
     return var_res, forecasts
 
-  param = []
-  accuracy = []
+#   param = []
+#   accuracy = []
 
-  best_p = 1
+#   best_p = 1
 
-  best_accuracy = mean_absolute_error(validation_df[['co', 'h2s', 'no2', 'o3', 'oxidizing_gases', 'reducing_gases', 'so2']], 
-                     var_first_diff(training_df.set_index('date'), best_p, 80)[1].reset_index().rename(columns={'index':'date'})[['co', 'h2s', 'no2', 'o3', 'oxidizing_gases', 'reducing_gases', 'so2']])
+#   best_accuracy = mean_absolute_error(validation_df[['co', 'h2s', 'no2', 'o3', 'oxidizing_gases', 'reducing_gases', 'so2']], 
+#                      var_first_diff(training_df.set_index('date'), best_p, 80)[1].reset_index().rename(columns={'index':'date'})[['co', 'h2s', 'no2', 'o3', 'oxidizing_gases', 'reducing_gases', 'so2']])
 
-  for p in range(1, 50):
-    param.append(p)
+#   for p in range(1, 50):
+#     param.append(p)
   
-  accuracy.append(mean_absolute_error(validation_df[['co', 'h2s', 'no2', 'o3', 'oxidizing_gases', 'reducing_gases', 'so2']], 
-                     var_first_diff(training_df.set_index('date'), p, 80)[1].reset_index().rename(columns={'index':'date'})[['co', 'h2s', 'no2', 'o3', 'oxidizing_gases', 'reducing_gases', 'so2']]))
+#     accuracy.append(mean_absolute_error(validation_df[['co', 'h2s', 'no2', 'o3', 'oxidizing_gases', 'reducing_gases', 'so2']], 
+#                      var_first_diff(training_df.set_index('date'), p, 80)[1].reset_index().rename(columns={'index':'date'})[['co', 'h2s', 'no2', 'o3', 'oxidizing_gases', 'reducing_gases', 'so2']]))
   
-  temp_accuracy = accuracy[-1]
-  if temp_accuracy <= best_accuracy:
-    best_accuracy = temp_accuracy
-    best_p = p
+#     temp_accuracy = accuracy[-1]
+#     if temp_accuracy <= best_accuracy:
+#         best_accuracy = temp_accuracy
+#         best_p = p
 
-#   print(best_p)
+# #   print(best_p)
 
-  tunning_chart = alt.Chart(pd.DataFrame(list(zip(param, accuracy)), columns=['p', 'MAE'])).mark_line().encode(
-    x = 'p',
-    y = 'MAE'
-  )
-  st.altair_chart(tunning_chart)
+#   tunning_chart = alt.Chart(pd.DataFrame(list(zip(param, accuracy)), columns=['p', 'MAE'])).mark_line().encode(
+#     x = 'p',
+#     y = 'MAE'
+#   )
+#   st.altair_chart(tunning_chart)
 
 
   pred_df = var_first_diff(training_df.set_index('date'), 20, 80)[1].reset_index().rename(columns={'index':'date'})
