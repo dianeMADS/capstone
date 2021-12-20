@@ -102,7 +102,7 @@ def main():
   """The first step of our data exploration was to look at the node distribution across the city. The map below shows node locations based on their latitude and longitude. The coverage is a very good across the city of Chicago, with a good chunk of nodes along the coast of Lake Michigan. This exercise suggests some clustering for the upcoming analysis; we actually expect air quality to better around the lake than it is within the inner city, especially around industrial zones."""
   )
   latlon = list(zip(nodes['lat'], nodes['lon'], nodes['node_id']))
-  mapit = folium.Map( location=[41.85, -87.65], zoom_start=11, width = 800, height = 800)
+  mapit = folium.Map( location=[41.85, -87.65], zoom_start=11, width = 1000, height = 1000)
 
   for coord in latlon:
     folium.Marker( location=[ coord[0], coord[1] ],
@@ -182,9 +182,9 @@ def main():
 
 
   st.markdown('\n\n')
-  st.subheader('Sensor Codes and Metrics')
+  st.subheader('Sensor Metrics')
   st.markdown(
-    """Going deeper in the node examination, we finally looked at the actual metrics collected per sensor for the selected set of subsystems. In the visualization below, the six subsystems under consideration are color-coded, y-axis identifies sensors and x-axis gives corresponding parameters. Parameters related to pollution are (i) concentration from every gaze present in chemsense, (ii) and particles from plantower and alphasense. In order to simplify this first look at AoT, we limited our causal inference analysis to those air quality attributes."""
+    """The visualization below is the result of further AoT nodes exploration. It shows actual metrics collected per sensor for the selected set of subsystems. The six subsystems that were selected in previous steps are color-coded, y-axis identifies sensors and x-axis gives corresponding parameters. Pollution-related parameters are gaze concentrations from the seven collected by chemsense, and particles measured by plantower & alphasense. Although meteorological, environmental and physical factors can somehow influence the pollution, our causal inference analysis is limited to air quality attributes for preserving simplicity in this first effort with such a challenging dataset."""
   )
 
   subsystem_sensor_types = master_df[['subsystem', 'sensor']].groupby(['subsystem', 'sensor']).count().reset_index()
@@ -194,7 +194,7 @@ def main():
 #     x='sensor',
 #     y='subsystem',
 #     # color='subsystem'
-#   ).properties(width=1400)
+#   ).properties(width=1200)
 #   st.altair_chart(subsystem_chart)
 
   filtered_subsystems = master_df[master_df['subsystem'].isin(['lightsense', 'metsense', 'chemsense', 'alphasense', 'plantower'])]
@@ -222,7 +222,7 @@ def main():
   st.markdown('\n\n')
   st.subheader('Particle Counts')
   st.markdown(
-    """Before closing data wrangling, we needed to aggregate data from alphasense and plantower under our prior assumption that they are two versions of the same type of sensors. Three types of particles retain our attention: pm1, pm25 and pm10. The table below provides a description of related time series for the two types of sensors showing a huge difference between them: e.g. pm1 from alphasense vs. 1um_particle, pm1_atm and pm1_cf1 from plantower."""
+    """The previous visualization highlights many metrics for particle counts from alphasense and plantower that can be aggregated under three attributes pm1, pm25 and pm10. In this effort of bringing together the measurements from both subsystems, the table below first provides a description of related time series. This brings to the attention a difference of scale between measurements of the two types of sensor subsystems; for example, compare pm1 values that are from alphasense with 1um_particle, pm1_atm and pm1_cf1 collected by plantower."""
   )
 
 #   st.dataframe(filtered_subsystems.head())
@@ -237,10 +237,11 @@ def main():
   # df_w_pms
   st.dataframe(df_w_pms.describe())
 
+  st.markdown('\n\n')
   st.markdown(
-    """A quick look at the Literature did not provide a clue to bring the two subsystem measurements to the same scale. Before digging further, we checked on the correlation between the different time series and illustrated it with the heatmap below. The visualization suggests very low correlation between pm1, pm25 and pm10 from alphasense vs plantower measurements. This is the reason why we also eliminated particle counts from the study and characterized pollution by air quality gazes in the following analysis."""
+    """A quick look at the Literature did not provide a clue to bring the two subsystem measurements to the same scale. The lack of correlation between the different time series prevented us to dig deeper into a strategy to aggregate data from the two subsystems. The heatmap below illustrates our point, with very low correlation between pm1, pm25 and pm10 from alphasense vs plantower measurements. This is the reason why we also eliminate, from now on, particle counts from our study. Pollution is strictly characterized by air quality gazes in the following analysis."""
   )
-  st.image(Image.open("streamlit/data/Heatmap_Corr.JPG"))
+  st.image(Image.open("streamlit/data/Heatmap_Corr.JPG"), width=1200)
 
 #   "# might need a static image for seaborn and refer back to the notebook..."
 #   plt.rc('figure', figsize=(25, 10))
@@ -253,11 +254,13 @@ def main():
   st.markdown(
       """We also ran an initial clustering analysis of the nodes based on the types of sensors at each location. A sparse matrix for each node with the sensor types as the values was used.  The sensor types were limited to only the subsystem types that include air quality metrics.  The histogram below shows the clusters identified using agglomerative clustering with a distance threshold of 15.  """
   )
-  st.image(Image.open("streamlit/data/ExploratoryClusterCounts.jpg"))
 
   st.markdown(
      '''The clustering shows that the concentrations of the gasses are well represented in the blue and red cluster groups.  The particle sizes are only represented in the red cluster group and appear at less than 30 nodes. Therefore, these metrics may not be appropriate for this analysis.  The image below shows the locations of these clusters.  We can see that group 1, represented in orange, covers much of the city but lacks the air quality sensors.  We still believe that the other clusters provide enough coverage of the city and will provide valid results.'''
     )
+
+  st.markdown('\n\n')
+  st.image(Image.open("streamlit/data/ExploratoryClusterCounts.jpg"), width=1200)
     
 
   st.header("III. Causal Inference Analysis")
