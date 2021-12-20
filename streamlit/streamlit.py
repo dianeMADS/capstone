@@ -95,6 +95,9 @@ def main():
 
 
   st.markdown('node locations')
+  st.write(
+  """The first step of our data exploration was to look at the node distribution across the city. The map below shows node locations based on their latitude and longitude; there is a very good coverage of the city of Chicago, with a good bunch of nodes along the coast of Lake Michigan. This exercise suggests some clustering for the upcoming analysis, since we expect air quality to better close to the lake than it is in the city, especially in industrial zones."""
+  )
   latlon = list(zip(nodes['lat'], nodes['lon'], nodes['node_id']))
   mapit = folium.Map( location=[41.85, -87.65], zoom_start=11 )
 
