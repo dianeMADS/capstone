@@ -58,7 +58,7 @@ def main():
   )
 
   st.markdown('\n\n')
-  st.header("Reducing the Data")
+  st.header("I. Reducing the Data")
   st.markdown(
       """The data was initially collected and stored in a column style database with seven columns: timestamp, node id, subsystem, sensor, parameter, raw value, hrf value (processed value).  Ideally, we would have hosted this data on a cloud server and maintained the column database format by using Cassandra or a similar database schema or migrated to a relational database format such as PostgreSQL, however, the dataset was over 300GB in size and pushed the cost too high for our project.  We instead elected to write our own program to reduce the file to a manageable size. """
   )
@@ -92,7 +92,7 @@ def main():
   st.dataframe(sensors.head())
 
   st.markdown('\n\n')
-  st.header("Data Exploration")
+  st.header("II. Data Exploration")
   st.markdown(
       """Once the data was reduced to hourly readings, we were able to explore the data using pandas.  Our initial exploration provided us with locations of the sensors and the time frame that each sensor was active.  With this information, we decided to modify our initial plan of focusing on quality of life to focus instead on a causal inference model comparing how trends in air quality changed due to Covid related lockdowns in the city."""
   )
@@ -258,7 +258,7 @@ def main():
     )
     
 
-  st.header("Causal Inference Analysis")
+  st.header("III. Causal Inference Analysis")
 
   st.markdown(
     """This causal inference analysis is to understand if the first COVID-19 lockdown in the city of Chicago, from March 21st to May 31st 2020, reduced pollution within the city. As discussed in data wrangling section, limitations observed in our dataset pushed us to estimate pollution on the basis of air quality gazes only. Those gazes are co, h2s, no2, o3, oxydizing gaes, reducing gazes and so2."""
@@ -435,7 +435,7 @@ def main():
   
 
   st.markdown('\n\n')
-  st.header("Cluster Analysis")
+  st.header("IV. Cluster Analysis")
   
   st.markdown(
       """Node clustering seemed like an obvious choice for analysis with similar data being collected around the city.  We were expecting to find some similarity between nodes with each metric that may indicate differences or similarities between neighborhoods that are not physically close to each other.  The focus of this analysis is on the air quality metrics based on the concentrations of selected gasses.  This analysis does not explore what is “good” vs “bad” air quality, it instead focuses on identifying similar concentration levels of gasses over time. The results of this analysis may be interesting to correlate with other metrics such as income maps, housing prices, zoning (ex. business vs residential areas), and heath maps."""
@@ -480,11 +480,20 @@ def main():
   st.image(Image.open('streamlit/data/AgglomerativeClusters.jpg'), caption='Agglomorative Clusters')
 
   
-  st.header("Possible Future Directions")
-  
+  st.header("V. Possible Future Directions")
   st.markdown(
-      """."""
+      """- Use LSTM for more robust predictions in the causal analysis."""
   )
+  st.markdown(
+      """- Complete the statistical error analysis to support or mitigate the conslusions of the study."""
+  )
+  st.markdown(
+      """- Refine clustering and run the causal analysis pipeline on a per cluster basis."""
+  )
+  st.markdown(
+      """- Keep meteorological and environmental timeseries in the study when possible (i.e. from data consistency perspective), since those features can still impact air quality."""
+  )
+
 
 
 
