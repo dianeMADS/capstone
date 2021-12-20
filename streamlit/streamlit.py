@@ -72,37 +72,37 @@ def main():
       """This command unzips the file line by line and pipes it to the awk function.  This function splits the line by a comma and prints the line to a file with the name of value found in the second column (the node id).  This significantly reduce the size of each file we worked with but with the largest files around 10 GB, we still had to reduce the data.  Data was collected every second at each node.  We did not need this level of granularity and decided to average the readings every hour.  Theoretically, this would reduce our data by a factor of about 3600.  We completed this reduction in C# due to its speed and support for parallel processes, but a similar pipeline could be implemented in python. """
   )
   st.markdown(
-      """The process we used is only possible with the data was already sorted by ascending date.  The entire code can be found on our GitHub page.   The process was to first assign a thread to read a file.  The first line in the file becomes the start time rounded to the nearest half hour rounded down (ex 4:15 would have a start time at 3:30 and 4:45 would have a start time of 4:30) and the end time is the start time plus one hour.  A dictionary of values with the parameter, subsensor, and system as the key and the total for each as the values was then created.  Once the timestamp is greater than the end time or there are no more lines in the file to read, the thread takes the mean value for each key and appends it to a new csv file with the node id.  The values are cleared and the thread continues if there are more values in the file or moves on to the next file.  The entire process takes about 30 minutes to run, and we were able to reduce the size of the entire dataset from 300 GB down to 1.8 GB.  This size is near the limits for pandas but proved to be manageable after filtering by metrics for each analysis."""
+      """The process we used is only possible with the data was already sorted by ascending date.  The entire code can be found on our GitHub repository.   The process was to first assign a thread to read a file.  The first line in the file becomes the start time rounded to the nearest half hour rounded down (ex 4:15 would have a start time at 3:30 and 4:45 would have a start time of 4:30) and the end time is the start time plus one hour.  A dictionary of values with the parameter, subsensor, and system as the key and the total for each as the values was then created.  Once the timestamp is greater than the end time or there are no more lines in the file to read, the thread takes the mean value for each key and appends it to a new csv file with the node id.  The values are cleared and the thread continues if there are more values in the file or moves on to the next file.  The entire process takes about 30 minutes to run, and we were able to reduce the size of the entire dataset from 300 GB down to 1.8 GB.  This size is near the limits for pandas but proved to be manageable after filtering by metrics for each analysis."""
   )
 
   st.subheader("Sample Data from One Single Node")
   sample_data = pd.read_csv('streamlit/data/Numeric_001e06112e77.csv')
   st.dataframe(sample_data.head())
 
-  st.subheader('Master Dataframe (daily aggregation)')
+  st.subheader('Master Dataframe (daily aggregation, and human-readable hrf values only)')
   master_df = pd.read_csv("streamlit/data/cleaned_dataset.zip")
   st.dataframe(master_df.head())
 
-  st.subheader('Nodes Information')
+  st.subheader('Nodes Generic Information')
   nodes = pd.read_csv("streamlit/data/nodes.csv")
   st.dataframe(nodes.head())
 
-  st.subheader('Sensors Information')
+  st.subheader('Sensors Generic Information')
   sensors = pd.read_csv('streamlit/data/sensors.csv')
   st.dataframe(sensors.head())
 
   st.markdown('\n\n')
   st.header("II. Data Exploration")
   st.markdown(
-      """Once the data was reduced to hourly readings, we were able to explore the data using pandas.  Our initial exploration provided us with locations of the sensors and the time frame that each sensor was active.  With this information, we decided to modify our initial plan of focusing on quality of life to focus instead on a causal inference model comparing how trends in air quality changed due to Covid related lockdowns in the city."""
+      """Once the data was reduced to hourly readings, we were able to explore the data using pandas.  Our initial exploration provided us with locations of the sensors and the time frame that each sensor was active.  With this information, we decided to modify our initial plan of focusing on quality of life to focus instead on a causal inference model comparing how trends in air quality changed due to COVID-19 related lockdowns in the city."""
   )
   
   st.subheader('Node Locations')
   st.write(
-  """The first step of our data exploration was to look at the node distribution across the city. The map below shows node locations based on their latitude and longitude; there is a very good coverage of the city of Chicago, with a good bunch of nodes along the coast of Lake Michigan. This exercise suggests some clustering for the upcoming analysis, since we expect air quality to better close to the lake than it is in the city, especially in industrial zones."""
+  """The first step of our data exploration was to look at the node distribution across the city. The map below shows node locations based on their latitude and longitude. The coverage is a very good across the city of Chicago, with a good chunk of nodes along the coast of Lake Michigan. This exercise suggests some clustering for the upcoming analysis; we actually expect air quality to better around the lake than it is within the inner city, especially around industrial zones."""
   )
   latlon = list(zip(nodes['lat'], nodes['lon'], nodes['node_id']))
-  mapit = folium.Map( location=[41.85, -87.65], zoom_start=11 )
+  mapit = folium.Map( location=[41.85, -87.65], zoom_start=11, width = 600, height = 600)
 
   for coord in latlon:
     folium.Marker( location=[ coord[0], coord[1] ],
@@ -117,10 +117,13 @@ def main():
   st.markdown('\n\n')
   st.subheader('Collection Period of Time')
   st.write(
-      """The city of Chicago AoT website reported that nodes were commissioned and decommissioned between 2017 and 2020. Further than commissioning/decommissioning period of times, the plot below indicates exactly when data collection started and ended for the given nodes. We notice lots of inconsistencies among nodes, with recording times going from 0 to 1112 days for an average of 416 days. It is difficult to envisage a per node study, otherwise many if not most of the nodes will not have enough data for a decent analysis of the periods before covid-19 (i.e. from the commissioning to March 20th, 2020) and lockdown from March 21st to May 31st 2020."""
+      """The city of Chicago AoT website reported that nodes were commissioned and decommissioned between 2017 and 2020. Further than commissioning & decommissioning times, the following visualization indicates when exactly data started and ended to be collected for given nodes. We notice lots of inconsistencies among nodes for related time periods. Recording times went from 0 to 1112 days for an average of 416 days. We also see that nodes were turned up/off at different times within the years under consideration, without specific rules. It is difficult to envisage a per node study, otherwise many (if not most) nodes will not have enough data for a decent analysis in the time before covid-19 (i.e. from the commissioning to March 20th, 2020) and during lockdown from March 21st to May 31st, 2020."""
   )
   st.markdown(
-    """Two main takes on from this: (i) we decided to average parameters over nodes, assuming that they shouldn’t be that different within the same city within the same season. (ii) In a second step, we will refine the study to average and thereby make the analysis per similarity or within each cluster."""
+    """i. The two main take-ons from these observations brought us to average parameters over nodes, assuming that parameter values shouldbe similar within the same city, in the same period of time & season."""
+  )
+  st.markdown(
+    """(ii) In a second step, we will refine the study to average and thereby make the analysis per similarity or within each cluster."""
   )
 
   up_df = pd.DataFrame(columns=['node_id', 'start', 'end'])
@@ -133,12 +136,11 @@ def main():
   up_df['days_up'] = (up_df.end.dt.date - up_df.start.dt.date).dt.days
 #   st.dataframe(up_df.head())
 
-  st.markdown('time for data collection, description ...')
 #   st.dataframe(up_df.describe().T)  
 
   base = alt.Chart(up_df).encode(
       alt.X('node_id:N')
-  ).properties(width = 1400, height = 350)
+  ).properties(width = 1200, height = 400)
 
   rule = base.mark_rule().encode(
       alt.Y('start:T', axis = alt.Axis(format='%m/%y', title='Date')), #,labelAngle=-45
