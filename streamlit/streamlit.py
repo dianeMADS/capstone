@@ -117,6 +117,9 @@ def main():
   st.write(
       """The city of Chicago AoT website reported that nodes were commissioned and decommissioned between 2017 and 2020. Further than commissioning/decommissioning period of times, the plot below indicates exactly when data collection started and ended for the given nodes. We notice lots of inconsistencies among nodes, with recording times going from 0 to 1112 days for an average of 416 days. It is difficult to envisage a per node study, otherwise many if not most of the nodes will not have enough data for a decent analysis of the periods before covid-19 (i.e. from the commissioning to March 20th, 2020) and lockdown from March 21st to May 31st 2020."""
   )
+  st.markdown(
+    """Two main takes on from this: (i) we decided to average parameters over nodes, assuming that they shouldn’t be that different within the same city within the same season. (ii) In a second step, we will refine the study to average and thereby make the analysis per similarity or within each cluster."""
+  )
 
   up_df = pd.DataFrame(columns=['node_id', 'start', 'end'])
   idx = 0
