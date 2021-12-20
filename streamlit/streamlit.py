@@ -214,20 +214,14 @@ def main():
   ).properties(width=1400, height=500)
   st.altair_chart(param_chart)
 
-  st.dataframe(filtered_subsystems.head())
 
-
-  
   st.markdown('\n\n')
   st.markdown('* Particles count')
   st.markdown(
-    """ ."""
+    """Before closing data wrangling, we needed to aggregate data from alphasense and plantower under our prior assumption that they are two versions of the same type of sensors. Three types of particles retain our attention: pm1, pm25 and pm10. The table below provides a description of related time series for the two types of sensors showing a huge difference between them: e.g. pm1 from alphasense vs. 1um_particle, pm1_atm and pm1_cf1 from plantower."""
   )
 
-  st.markdown(
-    """ """
-  )
-
+#   st.dataframe(filtered_subsystems.head())
 
   pms = ['10um_particle', '1um_particle', '2_5um_particle', '5um_particle', 'pm1', 'pm10', 'pm10_atm', 'pm10_cf1', 'pm1_atm', 'pm1_cf1', 'pm25_atm', 'pm25_cf1', 'pm2_5', 'point_3um_particle', 'point_5um_particle', 'fw', 'sample_flow_rate', 'sampling_period']
   # 'concentration', 
@@ -238,6 +232,11 @@ def main():
 
   # df_w_pms
   st.dataframe(df_w_pms.describe())
+
+  st.markdown(
+    """A quick look at the Literature did not provide a clue to bring the two subsystem measurements to the same scale. Before digging further, we checked on the correlation between the different time series and illustrated it with the heatmap below. The visualization suggests very low correlation between pm1, pm25 and pm10 from alphasense vs plantower measurements. This is the reason why we also eliminated particle counts from the study and characterized pollution by air quality gazes in the following analysis."""
+  )
+  st.image(Image.open("streamlit/data/Heatmap_Corr.jpg"))
 
 #   "# might need a static image for seaborn and refer back to the notebook..."
 #   plt.rc('figure', figsize=(25, 10))
