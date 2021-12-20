@@ -97,8 +97,10 @@ def main():
 
 
   st.markdown('node locations')
+  latlon = list(zip(nodes['lat'], nodes['lon'], nodes['node_id']))
+
   "# might need a static image for folium and refer back to the notebook..."
-  latlon = list(zip(nodes['lat'], nodes['lon'], node['node_id']))
+#   latlon = list(zip(nodes['lat'], nodes['lon'], node['node_id']))
 #   mapit = folium.Map( location=[41.85, -87.65], zoom_start=11 )
 
 #   for coord in latlon:
