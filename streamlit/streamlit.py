@@ -350,6 +350,11 @@ def main():
 #   st.altair_chart(tunning_chart)
 
 
+  st.markdown(
+      """."""
+  )
+ 
+
   pred_df = var_first_diff(training_df.set_index('date'), 20, 80)[1].reset_index().rename(columns={'index':'date'})
 #   pred_df
 
@@ -374,10 +379,35 @@ def main():
 
   st.altair_chart(chart)
 
-  st.markdown(
-      """."""
-  )
- 
+    
+  control_df = var_first_diff(df[df['date'] < '2020-03-21'].set_index('date'), 20, 72)[1].reset_index().rename(columns={'index':'date'})
+#   control_df    
+    
+  treatment_df = df[(df['date'] >= '2020-03-21') & (df['date'] < '2020-06-01')]
+#   treatment_df
+
+
+  causal_df = treatment_df.copy()
+  causal_df['type'] = 'treatment'
+  control_df['type'] = 'control'
+  causal_df = causal_df.append(control_df)
+
+  base = alt.Chart(causal_df).mark_line().encode(x = 'date:T', color='type').properties(width=250, height=250)
+
+  chart = alt.vconcat()
+
+  row = alt.hconcat()
+  for gase in ['co:Q', 'h2s:Q', 'no2:Q', 'o3:Q']:
+    row |= base.encode(y=gase)
+  chart &= row
+
+  row = alt.hconcat()
+  for gase in ['oxidizing_gases:Q', 'reducing_gases:Q', 'so2:Q']:
+    row |= base.encode(y=gase)
+  chart &= row
+
+  st.altair_chart(chart)
+  
 
   st.markdown(
       """."""
