@@ -75,7 +75,7 @@ def main():
 #   st.dataframe(sample_data.head())
 
   st.markdown("master dafaframe")
-  master_df = pd.read_csv("data/cleaned_dataset.zip")
+  master_df = pd.read_csv("streamlit/data/cleaned_dataset.zip")
   st.dataframe(master_df.head())
 
   st.markdown('nodes')
