@@ -7,57 +7,8 @@ Original file is located at
     https://colab.research.google.com/drive/1PNepn-yeKr3KDAexRLmP0zaBsaichYbp
 """
 
-# !pip install streamlit
-
-# ! pip install streamlit-folium
-
-# Commented out IPython magic to ensure Python compatibility.
-# %%writefile app.py
-# import streamlit as st
-# import pandas as pd
-# import numpy as np
-# 
-# import gzip
-# from google.colab import drive
-# import os
-# 
-# from PIL import Image
-# 
-# import matplotlib.pyplot as plt
-# import altair as alt
-# # from streamlit_folium import folium_static
-# import folium
-# import seaborn as sb
-# 
-# from statsmodels.tsa.api import VAR
-# from statsmodels.tsa.vector_ar.var_model import VARResults, VARResultsWrapper
-# # statsmodels.tsa.vector_ar.var_model.VARProcess.forecast_interval
-# 
-# # Suppress warnings
-# import warnings
-# from statsmodels.tools.sm_exceptions import ValueWarning
-# warnings.simplefilter("ignore", ValueWarning)
-# 
-# # st.title("MADS 697/698 - CAPSTONE")
-# # st.header("Diane O and James N")
-# 
-# 
-# def main():
-#   # "# MADS CAPSTONE, SIADS 697-698"
-#   st.header("MADS CAPSTONE, SIADS 697-698")
-#   # st.markdown('\n\n')
-#   st.title("Covid-19 Lockdown and Pollution in the City of Chicago?")
-#   # st.markdown('\n\n')
-#   st.header("Diane O. and James N.")
-#   st.markdown('\n\n')
-# 
-#   # menu = ["Test 1", "Test 2"]
-#   # choice = st.sidebar.selectbox('Menu', menu)
-#   # if choice == 'Test 1':
-#   #     st.header("This is Test 1")
-# 
-#   st.markdown(
-#     """For our project, we decided to focus on the Chicago Array of Things Dataset.  This massive dataset was collected between 2018 and 2020 from a node array installed throughout the city of Chicago.  Nodes have a variety of sensors installed at each location.  These sensors fall into one of six categories air quality, meteorological, physical, environmental, system, and vision.  For this analysis, we focus mainly on the air quality metrics.  This includes concentrations of five gasses: CO, H2S, NO2, O3, and SO2, as well as oxidizing and reducing gas concentrations. """)
-# 
-# if __name__ == '__main__':
-#   main()
+# import module
+import streamlit as st
+ 
+# Title
+st.title("Hello GeeksForGeeks !!!")
