@@ -236,7 +236,7 @@ def main():
   st.markdown(
     """A quick look at the Literature did not provide a clue to bring the two subsystem measurements to the same scale. Before digging further, we checked on the correlation between the different time series and illustrated it with the heatmap below. The visualization suggests very low correlation between pm1, pm25 and pm10 from alphasense vs plantower measurements. This is the reason why we also eliminated particle counts from the study and characterized pollution by air quality gazes in the following analysis."""
   )
-  st.image(Image.open("streamlit/data/Heatmap_Corr.jpg"))
+  st.image(Image.open("streamlit/data/Heatmap_Corr.JPG"))
 
 #   "# might need a static image for seaborn and refer back to the notebook..."
 #   plt.rc('figure', figsize=(25, 10))
