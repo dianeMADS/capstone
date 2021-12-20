@@ -311,21 +311,10 @@ def main():
       """We would like to use pre-lockdown (i.e. before March 21st, 2020) measurements to predict values during lockdown. Before doing so, it is important to validate the prediction model to be used; this implies temporarily reserving a small portion of the training set, here January 1st to March 20th 2020, while keeping anything before January 2020 strictly for training."""
   )
   st.markdown(
-    """On the other hand, there are seven features to predict, one for each type of gaze; the features in question are timeseries and are expected to be somehow correlated to each other. Vector autoregression (VAR) method fits such mandate pretty well, and is quite simple to apply with a single hyper-parameter p (the causal inference notebook provides details on p tuning in our case).
-    
-    The visualization below plots prediction values for the validation set, against actual measurements in blue."""
-  )
- 
- 
-  st.subheader("""Causal Analysis""")
-  st.markdown(
-    """After the above training & validation, we are more confident to train our VAR model over the entire period before lockdown on March 21st, 2020. Then we use the fitted model to predict air quality gaze concentrations during lockdown from March 21st to May 31st 2020."""
+    """On the other hand, there are seven features to predict, one for each type of gaze; the features in question are timeseries and are expected to be somehow correlated to each other. Vector autoregression (VAR) method fits such mandate pretty well, and is quite simple to apply with a single hyper-parameter p (the causal inference notebook provides details on p tuning in our case)."""
   )
   st.markdown(
-    """In the results below, predictions in blue represent what would have happened between March 21st and May 31st 2020 without lockdown. The comparison of those with actual lockdown measurements in orange shows orange below blue for most gazes, suggesting an improvement of air quality gazes during lockdown. Interestingly, so2 concentration does not follow this logic; litterature indicatest that so2 mainly results from home pollution (e.g. gazes from oven when cooking) on the contrary of the other six gazes. So with people being mostly at home during lockdown it is logic that so2 did not improve during lockdown."""
-  )
-  st.markdown(
-    """However, we should not conclude so fast without nore investigations. Data for air quality gaze concentrations are really volatile; our attempt to add confidence intervals around forecast values need more refining as shown in the notebook. We also believe that a deep learning model like LSTM would provide more robust predictions given the nature of the data."""
+    """The visualization below plots prediction values for the validation set, against actual measurements in blue."""
   )
     
   training_df = df[df['date'] < '2020-01-01']
@@ -381,12 +370,6 @@ def main():
 #   )
 #   st.altair_chart(tunning_chart)
 
-
-  st.markdown(
-      """."""
-  )
- 
-
   pred_df = var_first_diff(training_df.set_index('date'), 20, 80)[1].reset_index().rename(columns={'index':'date'})
 #   pred_df
 
@@ -411,7 +394,22 @@ def main():
 
   st.altair_chart(chart)
 
-    
+ 
+  st.subheader("""Causal Analysis""")
+  st.markdown(
+    """After the above training & validation, we are more confident to train our VAR model over the entire period before lockdown on March 21st, 2020. Then we use the fitted model to predict air quality gaze concentrations during lockdown from March 21st to May 31st 2020."""
+  )
+  st.markdown(
+    """In the results below, predictions in blue represent what would have happened between March 21st and May 31st 2020 without lockdown. The comparison of those with actual lockdown measurements in orange shows orange below blue for most gazes, suggesting an improvement of air quality gazes during lockdown. Interestingly, so2 concentration does not follow this logic; litterature indicatest that so2 mainly results from home pollution (e.g. gazes from oven when cooking) on the contrary of the other six gazes. So with people being mostly at home during lockdown it is logic that so2 did not improve during lockdown."""
+  )
+  st.markdown(
+    """However, we should not conclude so fast without nore investigations. Data for air quality gaze concentrations are really volatile; our attempt to add confidence intervals around forecast values need more refining as shown in the notebook. We also believe that a deep learning model like LSTM would provide more robust predictions given the nature of the data."""
+  )
+  st.markdown(
+      """."""
+  )
+ 
+
   control_df = var_first_diff(df[df['date'] < '2020-03-21'].set_index('date'), 20, 72)[1].reset_index().rename(columns={'index':'date'})
 #   control_df    
     
@@ -495,6 +493,13 @@ def main():
       """For the agglomerative clustering, it appears that there are differences in the cluster groups that are clear in the average time series for each cluster especially between 2019 and 2020. The blue (0) cluster group has far greater variance than the orange (4) cluster.  We can also see that the blue cluster does not continue into 2021. In the map, we can see that most of the nodes belong to a single cluster.   The smallest clusters appear to be the least consistent sensors and have many data gaps or were only active for a short period of time. It appears that the clusters may have only separated based on measurement consistency.  Further analysis is required to understand why these nodes are producing noisier data.  It is unclear if this is due to a faulty sensor or if there are local sources of pollution that cause the spikes.  Future projects could compare these clusters to traffic patterns and industrial centers that could be producers.  It would also be beneficial to include more variables such as wind speed and direction that have an impact on the direction of pollution plume movement.  """
   )
   st.image(Image.open('streamlit/data/AgglomerativeClusters.jpg'), caption='Agglomorative Clusters')
+
+  
+  st.header("Possible Future Directions")
+  
+  st.markdown(
+      """."""
+  )
 
 
 
