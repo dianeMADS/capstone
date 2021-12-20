@@ -102,7 +102,7 @@ def main():
   """The first step of our data exploration was to look at the node distribution across the city. The map below shows node locations based on their latitude and longitude. The coverage is a very good across the city of Chicago, with a good chunk of nodes along the coast of Lake Michigan. This exercise suggests some clustering for the upcoming analysis; we actually expect air quality to better around the lake than it is within the inner city, especially around industrial zones."""
   )
   latlon = list(zip(nodes['lat'], nodes['lon'], nodes['node_id']))
-  mapit = folium.Map( location=[41.85, -87.65], zoom_start=11, width = 600, height = 600)
+  mapit = folium.Map( location=[41.85, -87.65], zoom_start=11, width = 800, height = 800)
 
   for coord in latlon:
     folium.Marker( location=[ coord[0], coord[1] ],
@@ -123,7 +123,7 @@ def main():
     """i. The two main take-ons from these observations brought us to average parameters over nodes, assuming that parameter values shouldbe similar within the same city, in the same period of time & season."""
   )
   st.markdown(
-    """(ii) In a second step, we will refine the study to average and thereby make the analysis per similarity or within each cluster."""
+    """ii. In a second step, we will refine the study to average and thereby make the analysis per similarity or within each cluster."""
   )
 
   up_df = pd.DataFrame(columns=['node_id', 'start', 'end'])
@@ -163,10 +163,10 @@ def main():
   st.markdown('\n\n')
   st.subheader('Subsystem Types')
   st.markdown(
-    """Another important aspect of the city of Chicago AoT dataset is that nodes comprise a set of sensor subsystems that might differ from one node to the other. The visualization below shows ten different types of subsystems and indicates whether they are present in given AoT nodes. All 118 nodes (i.e. except one) comprise lightsense and meltsense that collect meteorological and a few environmental data. Out of those 118 nodes, 94 contain a chemsense to record air quality gaze concentrations. It is noticeable that most of the nodes (but three) that have an alphasense do not have a plantower and vice versa, both types collecting air quality particle counts. Our assumption is that plantower and alphasense are two versions of the same type of subsystem."""
+    """Another important aspect of the city of Chicago AoT is the set of sensor subsystems present within every node, and which might differ from one node to the other. The visualization below reveals ten different types of subsystems, and indicates whether the subsystems in questiob are present in the nodes for Chicago AoT. Almost all nodes (118 over the 119) comprise lightsense and meltsense subsystems for the collection of meteorological and a few environmental & physical data. Out of those 118 nodes, 94 contain a chemsense to record air quality gaze concentrations along with a couple of meteorological and physical data; note that the only node without lightsense or metsense has a chemsense. On the other hand, the visualization shows that most of the nodes (but three) that have an alphasense do not have a plantower and vice versa. Both plantower and alphasense subsystems collect air quality particle counts; our assumption is those are two versions/releases of the same type of subsystem."""
   )
   st.markdown(
-    """Remaining susbystems are available in a few nodes only, and/or belong to device and network quality that is out of the scope of this study. At this point, we realized that the amount of image and audio sensors reporting such important metrics as traffic (e.g. cars or people counts) and noise is not enough; we are not able to build some quality of life definition around the topic…"""
+    """Remaining susbystems (i.e. audio, image, ep, nc and wagman) are available in a few nodes only. The amount of image and audio sensors reporting such important metrics as traffic (e.g. cars or people counts) and noise was insufficient to envisage some quality of life definition around those metrics. Wagman, nc and ep subsystems belong to device and network quality measurements, which are out of the scope of this study."""
   )
 
   subsystem_types = master_df[['node_id', 'subsystem']].groupby(['node_id', 'subsystem']).count().reset_index()
@@ -177,12 +177,12 @@ def main():
     x='node_id',
     y='subsystem',
     color='subsystem'
-  ).properties(width=1400) #, height=250
+  ).properties(width=1200) #, height=250
   st.altair_chart(sensor_chart)
 
 
   st.markdown('\n\n')
-  st.subheader('Sensors')
+  st.subheader('Sensor Codes and Metrics')
   st.markdown(
     """Going deeper in the node examination, we finally looked at the actual metrics collected per sensor for the selected set of subsystems. In the visualization below, the six subsystems under consideration are color-coded, y-axis identifies sensors and x-axis gives corresponding parameters. Parameters related to pollution are (i) concentration from every gaze present in chemsense, (ii) and particles from plantower and alphasense. In order to simplify this first look at AoT, we limited our causal inference analysis to those air quality attributes."""
   )
