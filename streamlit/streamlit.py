@@ -261,8 +261,12 @@ def main():
     
 
   st.header("Causal Inference Analysis")
+
+  st.markdown(
+  """This causal inference analysis is to understand if the first COVID-19 lockdown in the city of Chicago, from March 21st to May 31st 2020, reduced pollution within the city."""
+  )
   
-  st.markdown('dataset')
+  st.subtitle('dataset')
   st.markdown(
       """With the assumptions and decisions discussed in data wrangling, we ended up with the following dataset, pivoted around parameters to have air quality gazes as features and measurements as observations. The plots below sample data show historical trends for each of the gaze."""
   )
