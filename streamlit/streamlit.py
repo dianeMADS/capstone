@@ -258,22 +258,13 @@ def main():
 
   st.header("Causal Inference Analysis")
   
+  st.markdown(dataset)
   st.markdown(
-      """."""
+      """With the assumptions and decisions discussed in data wrangling, we ended up with the following dataset, pivoted around parameters to have air quality gazes as features and measurements as observations. The plots below sample data show historical trends for each of the gaze."""
   )
- 
-
-  st.markdown(
-      """."""
-  )
- 
-
-  st.markdown(
-      """."""
-  )
-
+    
   df = filtered_subsystems[filtered_subsystems['parameters'] == 'concentration'].drop(['node_id', 'subsystem', 'parameters'], axis=1)
-  st.dataframe(df.head())
+#   st.dataframe(df.head())
 
   df = pd.pivot_table(df, values = 'values', index = 'date', columns = 'sensor', aggfunc=np.mean).reset_index()
   # df = df.fillna(method="bfill")
@@ -297,6 +288,30 @@ def main():
   chart &= row
 
   st.altair_chart(chart)
+ 
+
+  st.markdown("""Analysis goal.""")
+ 
+
+  st.markdown(
+      """."""
+  )
+ 
+
+  st.markdown(
+      """."""
+  )
+ 
+
+  st.markdown(
+      """."""
+  )
+ 
+
+  st.markdown(
+      """."""
+  )
+
 
     
   st.header("Cluster Analysis")
