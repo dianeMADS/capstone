@@ -98,9 +98,6 @@ def main():
 
   st.markdown('node locations')
   latlon = list(zip(nodes['lat'], nodes['lon'], nodes['node_id']))
-
-  "# might need a static image for folium and refer back to the notebook..."
-#   latlon = list(zip(nodes['lat'], nodes['lon'], node['node_id']))
   mapit = folium.Map( location=[41.85, -87.65], zoom_start=11 )
 
   for coord in latlon:
@@ -111,6 +108,47 @@ def main():
 
   folium.TileLayer('cartodbpositron').add_to(mapit)
   folium_static(mapit)
+
+
+  st.markdown('\n\n')
+  st.markdown('time for data collection')
+
+  up_df = pd.DataFrame(columns=['node_id', 'start', 'end'])
+  idx = 0
+  for node in nodes.node_id:
+    sample = master_df[master_df.node_id == node]
+    up_df.loc[idx] = [node, pd.to_datetime(sample.date).min(), pd.to_datetime(sample.date).max()]
+    idx += 1
+
+  up_df['days_up'] = (up_df.end.dt.date - up_df.start.dt.date).dt.days
+  st.dataframe(up_df.head())
+
+  st.markdown('time for data collection, description ...')
+  st.dataframe(up_df.describe().T)  
+
+  base = alt.Chart(up_df).encode(
+      alt.X('node_id:N')
+  ).properties(width = 1500)
+
+  rule = base.mark_rule().encode(
+      alt.Y('start:T', axis = alt.Axis(format='%m/%y', title='Date')), #,labelAngle=-45
+      alt.Y2('end:T')
+  )
+
+  startpoints = base.mark_circle(size=60).encode(
+      alt.Y('start:T'),
+      # alt.Y2('end:T')
+  )
+
+  endpoints = base.mark_circle(size=60).encode(
+      # alt.Y('start:T'),
+      alt.Y('end:T'), color = alt.value("#FFAA00")
+  )
+
+  st.altair_chart(rule + startpoints + endpoints)
+
+
+
 
 
 
