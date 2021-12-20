@@ -210,8 +210,8 @@ def main():
   st.dataframe(df_w_pms.describe())
 
   "# might need a static image for seaborn and refer back to the notebook..."
-  fig = plt.rc('figure', figsize=(25, 10))
-  sb.heatmap(df_w_pms.corr(method='pearson'), cmap='YlGnBu', annot=True)
+  plt.rc('figure', figsize=(25, 10))
+  fig = sb.heatmap(df_w_pms.corr(method='pearson'), cmap='YlGnBu', annot=True)
   st.plt(fig)
 
 
