@@ -237,7 +237,7 @@ def main():
   )
    
   def cluster_timeseries():
-    data = pd.read_csv('streamlit/data/clustered_dataset.zip')
+    data = pd.read_csv('streamlit/data/clustered_dataset2.zip')
     cols = ['concentration_co', 'concentration_h2s', 'concentration_no2', 'concentration_o3', 'concentration_oxidizing_gases', 'concentration_reducing_gases', 'concentration_so2']
     row = None
     column = None
