@@ -50,7 +50,8 @@ def main():
   #     st.header("This is Test 1")
 
   st.markdown(
-    """For our project, we decided to focus on the Chicago Array of Things Dataset.  This massive dataset was collected between 2018 and 2020 from a node array installed throughout the city of Chicago.  Nodes have a variety of sensors installed at each location.  These sensors fall into one of six categories air quality, meteorological, physical, environmental, system, and vision.  For this analysis, we focus mainly on the air quality metrics.  This includes concentrations of five gasses: CO, H2S, NO2, O3, and SO2, as well as oxidizing and reducing gas concentrations. """)
+    """For our project, we explored the Chicago Array of Things Dataset.  This massive dataset was collected between 2018 and 2020 from a node array installed throughout the city of Chicago.  Nodes have a variety of sensors installed at each location.  These sensors fall into one of six categories air quality, meteorological, physical, environmental, system, and vision.  Initially, we hoped to focus on determining the quality of life around the city.  This proved to be a bit too ambitious, however.  We found it very difficult to define quality of life and focus in on key measurements.  Instead, we focus mainly on the air quality metrics.  These metrics are easier to track over time and there are clear definitions for gas concentrations that are considered dangerous or unhealthy.  The analysis focuses on the concentrations of five gasses: CO, H2S, NO2, O3, and SO2, as well as oxidizing and reducing gas concentrations."""
+  )
 
   st.markdown('\n\n')
   st.header("Reducing the Data")
