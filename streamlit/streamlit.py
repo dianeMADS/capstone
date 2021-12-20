@@ -255,6 +255,50 @@ def main():
      '''The clustering shows that the concentrations of the gasses are well represented in the blue and red cluster groups.  The particle sizes are only represented in the red cluster group and appear at less than 30 nodes. Therefore, these metrics may not be appropriate for this analysis.  The image below shows the locations of these clusters.  We can see that group 1, represented in orange, covers much of the city but lacks the air quality sensors.  We still believe that the other clusters provide enough coverage of the city and will provide valid results.'''
     )
     
+
+  st.header("Causal Inference Analysis")
+  
+  st.markdown(
+      """."""
+  )
+ 
+
+  st.markdown(
+      """."""
+  )
+ 
+
+  st.markdown(
+      """."""
+  )
+
+  df = filtered_subsystems[filtered_subsystems['parameters'] == 'concentration'].drop(['node_id', 'subsystem', 'parameters'], axis=1)
+  st.dataframe(df.head())
+
+  df = pd.pivot_table(df, values = 'values', index = 'date', columns = 'sensor', aggfunc=np.mean).reset_index()
+  # df = df.fillna(method="bfill")
+  st.dataframe(df.head())
+  st.dataframe(df.describe())
+
+  df.date = pd.to_datetime(df.date)
+
+  base = alt.Chart(df).mark_line().encode(x = 'date:T').properties(width=250, height=250)#.interactive()
+
+  chart = alt.vconcat()
+
+  row = alt.hconcat()
+  for gase in ['co:Q', 'h2s:Q', 'no2:Q', 'o3:Q']:
+    row |= base.encode(y=gase)
+  chart &= row
+
+  row = alt.hconcat()
+  for gase in ['oxidizing_gases:Q', 'reducing_gases:Q', 'so2:Q']:
+    row |= base.encode(y=gase)
+  chart &= row
+
+  st.altair_chart(chart)
+
+    
   st.header("Cluster Analysis")
   
   st.markdown(
