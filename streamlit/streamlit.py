@@ -258,7 +258,7 @@ def main():
 
   st.header("Causal Inference Analysis")
   
-  st.markdown(dataset)
+  st.markdown('dataset')
   st.markdown(
       """With the assumptions and decisions discussed in data wrangling, we ended up with the following dataset, pivoted around parameters to have air quality gazes as features and measurements as observations. The plots below sample data show historical trends for each of the gaze."""
   )
@@ -292,6 +292,60 @@ def main():
 
   st.markdown("""Analysis goal.""")
  
+  training_df = df[df['date'] < '2020-01-01']
+#   training_df
+  validation_df = df[(df['date'] >= '2020-01-01') & (df['date'] < '2020-03-21')]
+#   validation_df
+
+  def var_first_diff(df, p, num_forecasts):
+    """
+    Fits a VAR(p) model on the first-order diff on a df and makes num_forecasts forecasts
+    """
+    var_res, forecasts = None, None
+    
+    data = df.diff().dropna()
+    var_res = VAR(data).fit(p)
+    lag_order = var_res.k_ar
+
+    #forecasts = var_res.forecast(df.values[-lag_order:], steps=num_forecasts)
+    forecasts = pd.DataFrame(var_res.forecast(data.values[-lag_order:], steps=num_forecasts), 
+                             columns=df.columns, index=[df.index[-1] + pd.DateOffset(i) for i in range(1, num_forecasts+1)])
+    
+    # print(forecasts.iloc[0])
+    forecasts.iloc[0] += df.iloc[-1]
+    for i in range(1, num_forecasts):
+        forecasts.iloc[i] += forecasts.iloc[i-1]
+    
+    return var_res, forecasts
+
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_absolute_error
+  param = []
+  accuracy = []
+
+  best_p = 1
+
+  best_accuracy = mean_absolute_error(validation_df[['co', 'h2s', 'no2', 'o3', 'oxidizing_gases', 'reducing_gases', 'so2']], 
+                     var_first_diff(training_df.set_index('date'), best_p, 80)[1].reset_index().rename(columns={'index':'date'})[['co', 'h2s', 'no2', 'o3', 'oxidizing_gases', 'reducing_gases', 'so2']])
+
+  for p in range(1, 50):
+    param.append(p)
+  
+  accuracy.append(mean_absolute_error(validation_df[['co', 'h2s', 'no2', 'o3', 'oxidizing_gases', 'reducing_gases', 'so2']], 
+                     var_first_diff(training_df.set_index('date'), p, 80)[1].reset_index().rename(columns={'index':'date'})[['co', 'h2s', 'no2', 'o3', 'oxidizing_gases', 'reducing_gases', 'so2']]))
+  
+  temp_accuracy = accuracy[-1]
+  if temp_accuracy <= best_accuracy:
+    best_accuracy = temp_accuracy
+    best_p = p
+
+#   print(best_p)
+
+  tunning_chart = alt.Chart(pd.DataFrame(list(zip(param, accuracy)), columns=['p', 'MAE'])).mark_line().encode(
+    x = 'p',
+    y = 'MAE'
+  )
+  st.altair_chart(tunning_chart)
 
   st.markdown(
       """."""
