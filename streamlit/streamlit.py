@@ -24,6 +24,10 @@ import seaborn as sb
 
 from statsmodels.tsa.api import VAR
 from statsmodels.tsa.vector_ar.var_model import VARResults, VARResultsWrapper
+
+from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_absolute_error
+
  
 # # Suppress warnings
 # import warnings
@@ -318,8 +322,6 @@ def main():
     
     return var_res, forecasts
 
-from sklearn.metrics import mean_squared_error
-from sklearn.metrics import mean_absolute_error
   param = []
   accuracy = []
 
@@ -346,6 +348,31 @@ from sklearn.metrics import mean_absolute_error
     y = 'MAE'
   )
   st.altair_chart(tunning_chart)
+
+
+  pred_df = var_first_diff(training_df.set_index('date'), 20, 80)[1].reset_index().rename(columns={'index':'date'})
+#   pred_df
+
+  plot_df = validation_df.copy()
+  plot_df['type'] = 'actual'
+  pred_df['type'] = 'predictions'
+  plot_df = plot_df.append(pred_df)
+
+  base = alt.Chart(plot_df).mark_line().encode(x = 'date:T', color='type').properties(width=250, height=250)
+
+  chart = alt.vconcat()
+
+  row = alt.hconcat()
+  for gase in ['co:Q', 'h2s:Q', 'no2:Q', 'o3:Q']:
+    row |= base.encode(y=gase)
+  chart &= row
+
+  row = alt.hconcat()
+  for gase in ['oxidizing_gases:Q', 'reducing_gases:Q', 'so2:Q']:
+    row |= base.encode(y=gase)
+  chart &= row
+
+  st.altair_chart(chart)
 
   st.markdown(
       """."""
