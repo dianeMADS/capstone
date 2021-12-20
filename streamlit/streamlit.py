@@ -158,6 +158,12 @@ def main():
 
   st.markdown('\n\n')
   st.markdown('node sensor types')
+  st.markdown(
+    """Another important aspect of the city of Chicago AoT dataset is that nodes comprise a set of sensor subsystems that might differ from one node to the other. The visualization below shows ten different types of subsystems and indicates whether they are present in given AoT nodes. All 118 nodes (i.e. except one) comprise lightsense and meltsense that collect meteorological and a few environmental data. Out of those 118 nodes, 94 contain a chemsense to record air quality gaze concentrations. It is noticeable that most of the nodes (but three) that have an alphasense do not have a plantower and vice versa, both types collecting air quality particle counts. Our assumption is that plantower and alphasense are two versions of the same type of subsystem."""
+  )
+  st.markdown(
+    """Remaining susbystems are available in a few nodes only, and/or belong to device and network quality that is out of the scope of this study. At this point, we realized that the amount of image and audio sensors reporting such important metrics as traffic (e.g. cars or people counts) and noise is not enough; we are not able to build some quality of life definition around the topic…"""
+  )
 
   subsystem_types = master_df[['node_id', 'subsystem']].groupby(['node_id', 'subsystem']).count().reset_index()
   subsystem_types['count'] = 1
@@ -173,26 +179,35 @@ def main():
 
   st.markdown('\n\n')
   st.markdown('sensors')
+  st.markdown(
+    """ ."""
+  )
+
+  st.markdown(
+    """ """
+  )
+
+
   subsystem_sensor_types = master_df[['subsystem', 'sensor']].groupby(['subsystem', 'sensor']).count().reset_index()
   subsystem_types['count'] = 1
 
-  subsystem_chart = alt.Chart(subsystem_sensor_types).mark_rect().encode(
-    x='sensor',
-    y='subsystem',
-    # color='subsystem'
-  ).properties(width=1400)
-  st.altair_chart(subsystem_chart)
+#   subsystem_chart = alt.Chart(subsystem_sensor_types).mark_rect().encode(
+#     x='sensor',
+#     y='subsystem',
+#     # color='subsystem'
+#   ).properties(width=1400)
+#   st.altair_chart(subsystem_chart)
 
   filtered_subsystems = master_df[master_df['subsystem'].isin(['lightsense', 'metsense', 'chemsense', 'alphasense', 'plantower'])]
   subsystem_sensor_types = filtered_subsystems[['subsystem', 'sensor']].groupby(['subsystem', 'sensor']).count().reset_index()
   subsystem_types['count'] = 1
 
-  filteredsub_chart = alt.Chart(subsystem_sensor_types).mark_rect().encode(
-    x='sensor',
-    y='subsystem',
-    color='subsystem'
-  ).properties(width=1400)
-  st.altair_chart(filteredsub_chart)
+#   filteredsub_chart = alt.Chart(subsystem_sensor_types).mark_rect().encode(
+#     x='sensor',
+#     y='subsystem',
+#     color='subsystem'
+#   ).properties(width=1400)
+#   st.altair_chart(filteredsub_chart)
 
   sensor_types_parameters = filtered_subsystems[['subsystem', 'sensor', 'parameters']].groupby(['subsystem', 'sensor', 'parameters']).count().reset_index()
   sensor_types_parameters['count'] = 1
