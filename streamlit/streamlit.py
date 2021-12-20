@@ -71,8 +71,8 @@ def main():
   )
 
   st.markdown("data from one node")
-  # sample_data = pd.read_csv('data/Numeric_001e06112e77.csv')
-#   st.dataframe(sample_data.head())
+  sample_data = pd.read_csv('data/Numeric_001e06112e77.csv')
+  st.dataframe(sample_data.head())
 
   st.markdown("master dafaframe")
   master_df = pd.read_csv("streamlit/data/cleaned_dataset.zip")
