@@ -180,13 +180,8 @@ def main():
   st.markdown('\n\n')
   st.markdown('sensors')
   st.markdown(
-    """ ."""
+    """Going deeper in the node examination, we finally looked at the actual metrics collected per sensor for the selected set of subsystems. In the visualization below, the six subsystems under consideration are color-coded, y-axis identifies sensors and x-axis gives corresponding parameters. Parameters related to pollution are (i) concentration from every gaze present in chemsense, (ii) and particles from plantower and alphasense. In order to simplify this first look at AoT, we limited our causal inference analysis to those air quality attributes."""
   )
-
-  st.markdown(
-    """ """
-  )
-
 
   subsystem_sensor_types = master_df[['subsystem', 'sensor']].groupby(['subsystem', 'sensor']).count().reset_index()
   subsystem_types['count'] = 1
@@ -222,6 +217,18 @@ def main():
   st.dataframe(filtered_subsystems.head())
 
 
+  
+  st.markdown('\n\n')
+  st.markdown('* Particles count')
+  st.markdown(
+    """ ."""
+  )
+
+  st.markdown(
+    """ """
+  )
+
+
   pms = ['10um_particle', '1um_particle', '2_5um_particle', '5um_particle', 'pm1', 'pm10', 'pm10_atm', 'pm10_cf1', 'pm1_atm', 'pm1_cf1', 'pm25_atm', 'pm25_cf1', 'pm2_5', 'point_3um_particle', 'point_5um_particle', 'fw', 'sample_flow_rate', 'sampling_period']
   # 'concentration', 
   df_w_pms = filtered_subsystems[filtered_subsystems['parameters'].isin(pms) ].drop(['node_id', 'subsystem', 'sensor'], axis=1)
@@ -237,6 +244,9 @@ def main():
 #   fig = sb.heatmap(df_w_pms.corr(method='pearson'), cmap='YlGnBu', annot=True)
 #   st.plt(fig)
 
+
+  st.markdown('\n\n')
+  st.markdown('Initial clustering')
   st.markdown(
       """We also ran an initial clustering analysis of the nodes based on the types of sensors at each location. A sparse matrix for each node with the sensor types as the values was used.  The sensor types were limited to only the subsystem types that include air quality metrics.  The histogram below shows the clusters identified using agglomerative clustering with a distance threshold of 15.  """
   )
