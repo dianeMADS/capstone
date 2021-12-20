@@ -8,3 +8,4 @@ seaborn
 statsmodels
 streamlit_folium
 geopandas
+sklearn
