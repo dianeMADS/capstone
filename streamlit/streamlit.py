@@ -52,5 +52,40 @@ def main():
   st.markdown(
     """For our project, we decided to focus on the Chicago Array of Things Dataset.  This massive dataset was collected between 2018 and 2020 from a node array installed throughout the city of Chicago.  Nodes have a variety of sensors installed at each location.  These sensors fall into one of six categories air quality, meteorological, physical, environmental, system, and vision.  For this analysis, we focus mainly on the air quality metrics.  This includes concentrations of five gasses: CO, H2S, NO2, O3, and SO2, as well as oxidizing and reducing gas concentrations. """)
 
+  st.markdown('\n\n')
+  st.header("Reducing the Data")
+  st.markdown(
+      """The data was initially collected and stored in a column style database with seven columns: timestamp, node id, subsystem, sensor, parameter, raw value, hrf value (processed value).  Ideally, we would have hosted this data on a cloud server and maintained the column database format by using Cassandra or a similar database schema or migrated to a relational database format such as PostgreSQL, however, the dataset was over 300GB in size and pushed the cost too high for our project.  We instead elected to write our own program to reduce the file to a manageable size. """
+  )
+  st.markdown(
+      """After the file was un tar ed to a gzip file, the first step was to split the data into separate files based on the node that collected the data.  This was done using the bash command line and the function below:"""
+  )
+  st.code(
+      """zcat file.csv.gz | awk -F “,” ‘{print>“subfolder/”$2“.csv”}’""", language="cli"
+  )
+  st.markdown(
+      """This command unzips the file line by line and pipes it to the awk function.  This function splits the line by a comma and prints the line to a file with the name of value found in the second column (the node id).  This significantly reduce the size of each file we worked with but with the largest files around 10 GB, we still had to reduce the data.  Data was collected every second at each node.  We did not need this level of granularity and decided to average the readings every hour.  Theoretically, this would reduce our data by a factor of about 3600.  We completed this reduction in C# due to its speed and support for parallel processes, but a similar pipeline could be implemented in python. """
+  )
+  st.markdown(
+      """The process we used is only possible with the data was already sorted by ascending date.  The entire code can be found on our GitHub page.   The process was to first assign a thread to read a file.  The first line in the file becomes the start time rounded to the nearest half hour rounded down (ex 4:15 would have a start time at 3:30 and 4:45 would have a start time of 4:30) and the end time is the start time plus one hour.  A dictionary of values with the parameter, subsensor, and system as the key and the total for each as the values was then created.  Once the timestamp is greater than the end time or there are no more lines in the file to read, the thread takes the mean value for each key and appends it to a new csv file with the node id.  The values are cleared and the thread continues if there are more values in the file or moves on to the next file.  The entire process takes about 30 minutes to run, and we were able to reduce the size of the entire dataset from 300 GB down to 1.8 GB.  This size is near the limits for pandas but proved to be manageable after filtering by metrics for each analysis."""
+  )
+
+  st.markdown("data from one node")
+  # sample_data = pd.read_csv('data/Numeric_001e06112e77.csv')
+  st.dataframe(sample_data.head())
+
+  st.markdown("master dafaframe")
+  master_df = pd.read_csv("data/cleaned_dataset.zip")
+  st.dataframe(master_df.head())
+
+  st.markdown('nodes')
+  nodes = pd.read_csv("data/nodes.csv")
+  st.dataframe(nodes.head())
+
+  st.markdown('sensors')
+  sensors = pd.read_csv('data/sensors.csv')
+  st.dataframe(sensors.head())
+    
+    
 if __name__ == '__main__':
   main()
