@@ -177,7 +177,7 @@ def main():
     x='node_id',
     y='subsystem',
     color='subsystem'
-  ).properties(width=1200) #, height=250
+  ).properties(width=1200, height=400) #
   st.altair_chart(sensor_chart)
 
 
@@ -215,7 +215,7 @@ def main():
     x='parameters',
     y='sensor',
     color='subsystem'
-  ).properties(width=1400, height=500)
+  ).properties(width=1200, height=600)
   st.altair_chart(param_chart)
 
 
@@ -266,17 +266,17 @@ def main():
   st.header("III. Causal Inference Analysis")
 
   st.markdown(
-    """This causal inference analysis is to understand if the first COVID-19 lockdown in the city of Chicago, from March 21st to May 31st 2020, reduced pollution within the city. As discussed in data wrangling section, limitations observed in our dataset pushed us to estimate pollution on the basis of air quality gazes only. Those gazes are co, h2s, no2, o3, oxydizing gaes, reducing gazes and so2."""
+    """This causal inference analysis is to determine if the first lockdown, from March 21st to May 31st 2020, due to COVID-19 rising cases in the city of Chicago reduced pollution within the city. As discussed in data wrangling section, pollution will be determine on the basis of air quality gazes only, because of the limitations of AoT dataset on hands. Air quality gazes are co, h2s, no2, o3, oxydizing gazes, reducing gazes and so2."""
   )
     
   st.markdown(
-    """On the other hand, note that we do not have two (control vs treatment) groups for the causal analysis since the study focuses on one city that cannot be simultaneously opened up and lockdown. In such cases, counterfactuals are required to determine, using robust predictions, what would have happened the unseen circumstance existed."""
+    """On the other hand, we do not have two (control vs treatment) groups for the causal analysis since the study focuses on the sole city of Chicago, which cannot be simultaneously opened up and lockdown. In such a case, counterfactuals are required to determine what would have happened if the unseen circumstance existed."""
   )
 
   
   st.subheader('Data')
   st.markdown(
-      """The following table shows a sample of the slice of data used for causal inference. Those are pivoted around parameters to have air quality gazes as features and measurements as observations. The next table complements the previous one with some statistics around air gaze timeseries."""
+      """The following table shows a sample of the slice of data used for causal inference. Those are pivoted around parameters to have air quality gazes as features, and measurements as observations. The second next table complements the previous one with some statistics around air gaze timeseries."""
   )
   df = filtered_subsystems[filtered_subsystems['parameters'] == 'concentration'].drop(['node_id', 'subsystem', 'parameters'], axis=1)
 #   st.dataframe(df.head())
@@ -289,7 +289,7 @@ def main():
 
   st.markdown('\n\n')
   st.markdown(
-    """For illustration, here are some plots to show historical trends for air quality gaze concentrations. We see that data a really volatile, with some peaks that from our understanding correspond to moments when sensors were not functional."""
+    """For illustration, here are also some plots showing historical trends for air quality gaze concentrations. Gaze concentration is really volatile, with frequent peaks that correspond, from our understanding, to events that a given sensor does not properly function."""
   )
   df.date = pd.to_datetime(df.date)
 
@@ -311,15 +311,12 @@ def main():
 
   st.subheader("""VAR Model""")
   st.markdown(
-      """We would like to use pre-lockdown (i.e. before March 21st, 2020) measurements to predict values during lockdown. Before doing so, it is important to validate the prediction model to be used; this implies temporarily reserving a small portion of the training set, here January 1st to March 20th 2020, while keeping anything before January 2020 strictly for training."""
+      """We would like to use pre-lockdown (i.e. before March 21st, 2020) measurements to predict values during lockdown. But before proceeding, it is important to validate the prediction model to be used. We temporarily reserve a small portion of the training set, i.e. January 1st to March 20th 2020, while keeping anything before January 2020 strictly for training."""
   )
   st.markdown(
-    """On the other hand, there are seven features to predict, one for each type of gaze; the features in question are timeseries and are expected to be somehow correlated to each other. Vector autoregression (VAR) method fits such mandate pretty well, and is quite simple to apply with a single hyper-parameter p (the causal inference notebook provides details on p tuning in our case)."""
+    """On the other hand, there are seven features to predict, one for each type of gaze; the features in question are timeseries and are expected to be somehow correlated to each other. Vector autoregression (VAR) method fits such mandate pretty well and is quite simple to implement, with a single hyper-parameter p (the causal inference notebook provides details on p tuning in our case). The visualization below plots in orange VAR predicted values for the validation set, against actual measurements in blue."""
   )
-  st.markdown(
-    """The visualization below plots prediction values for the validation set, against actual measurements in blue."""
-  )
-    
+   
   training_df = df[df['date'] < '2020-01-01']
 #   training_df
   validation_df = df[(df['date'] >= '2020-01-01') & (df['date'] < '2020-03-21')]
@@ -400,13 +397,10 @@ def main():
  
   st.subheader("""Causal Analysis""")
   st.markdown(
-    """After the above training & validation, we are more confident to train our VAR model over the entire period before lockdown on March 21st, 2020. Then we use the fitted model to predict air quality gaze concentrations during lockdown from March 21st to May 31st 2020."""
+    """We can now use the same pipeline to train our VAR model over the entire period before lockdown on March 21st, 2020. Then we use the fitted model to predict air quality gaze concentrations during lockdown from March 21st to May 31st 2020. Results are shown below with predictions in blue, which represent what would have happened between March 21st and May 31st 2020 without lockdown. The comparison of no-treatment predictions with actual lockdown measurements in orange shows orange values below blue ones for most gazes. This suggests an improvement of air quality gazes during lockdown. Interestingly, so2 concentration does not follow the logic; litterature indicates that so2 mainly results from home pollution (e.g. gazes from oven, emitted while cooking) on the contrary of the other six gazes. So with people being mostly at home during lockdown it is understandable that so2 did not improve during lockdown."""
   )
   st.markdown(
-    """In the results below, predictions in blue represent what would have happened between March 21st and May 31st 2020 without lockdown. The comparison of those with actual lockdown measurements in orange shows orange below blue for most gazes, suggesting an improvement of air quality gazes during lockdown. Interestingly, so2 concentration does not follow this logic; litterature indicatest that so2 mainly results from home pollution (e.g. gazes from oven when cooking) on the contrary of the other six gazes. So with people being mostly at home during lockdown it is logic that so2 did not improve during lockdown."""
-  )
-  st.markdown(
-    """However, we should not conclude so fast without nore investigations. Data for air quality gaze concentrations are really volatile; our attempt to add confidence intervals around forecast values need more refining as shown in the notebook. We also believe that a deep learning model like LSTM would provide more robust predictions given the nature of the data."""
+    """Even though the results obtained suggest some air quality improvement during city lockdown, it might be wise to conduct some statistical error analysis or get more robust predictions to support this conclusion. AoT data for air quality gaze concentrations are really volatile; our attempt to add confidence intervals around forecast values need more refining as shown in the notebook. We also believe that a deep learning model like LSTM would provide more robust predictions given the nature of the data."""
   )
  
 
