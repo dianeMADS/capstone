@@ -85,7 +85,32 @@ def main():
   st.markdown('sensors')
   sensors = pd.read_csv('streamlit/data/sensors.csv')
   st.dataframe(sensors.head())
-  st.markdown("Hello")  
-    
+
+  st.markdown('\n\n')
+  st.header("Data Exploration")
+  st.markdown(
+      """Once the data was reduced to hourly readings, we were able to explore the data using pandas.  Our initial exploration provided us with locations of the sensors and the time frame that each sensor was active.  With this information, we decided to modify our initial plan of focusing on quality of life to focus instead on a causal inference model comparing how trends in air quality changed due to Covid related lockdowns in the city."""
+  )
+  st.markdown(
+      """We also ran an initial clustering analysis of the nodes based on the types of sensors at each location. A sparse matrix for each node with the sensor types as the values was used.  The sensor types were limited to only the subsystem types that include air quality metrics.  The dendrogram below was produced using agglomerative clustering with a distance threshold of 15.  There is clear separation between the groups meaning that there are differences in the types of data collected at these nodes.  From the bar chart, we can see that there is a cluster group that does not have any of the air quality data that we are most concerned with.  The other two groups have all of them and appear to have good coverage around the city as shown in the map."""
+  )
+
+
+  st.markdown('node locations')
+#   "# might need a static image for folium and refer back to the notebook..."
+  latlon = list(zip(nodes_df['lat'], nodes_df['lon'], nodes_df['node_id']))
+  mapit = folium.Map( location=[41.85, -87.65], zoom_start=11 )
+
+  for coord in latlon:
+    folium.Marker( location=[ coord[0], coord[1] ],
+                tooltip=('node:', coord[2], 'lat:', coord[0], 'lon:', coord[1]),
+                #  tooltip = ''
+                popup=coord[2]).add_to( mapit )
+
+  folium.TileLayer('cartodbpositron').add_to(mapit)
+  folium_static(mapit)
+
+
+
 if __name__ == '__main__':
   main()
