@@ -293,7 +293,7 @@ def main():
   )
   df.date = pd.to_datetime(df.date)
 
-  base = alt.Chart(df).mark_line().encode(x = 'date:T').properties(width=200, height=200)#.interactive()
+  base = alt.Chart(df).mark_line().encode(x = 'date:T').properties(width=225, height=225)#.interactive()
   chart = alt.vconcat()
 
   row = alt.hconcat()
@@ -378,7 +378,7 @@ def main():
   pred_df['type'] = 'predictions'
   plot_df = plot_df.append(pred_df)
 
-  base = alt.Chart(plot_df).mark_line().encode(x = 'date:T', color='type').properties(width=200, height=200)
+  base = alt.Chart(plot_df).mark_line().encode(x = 'date:T', color='type').properties(width=225, height=225)
 
   chart = alt.vconcat()
 
@@ -416,7 +416,7 @@ def main():
   control_df['type'] = 'control'
   causal_df = causal_df.append(control_df)
 
-  base = alt.Chart(causal_df).mark_line().encode(x = 'date:T', color='type').properties(width=200, height=200)
+  base = alt.Chart(causal_df).mark_line().encode(x = 'date:T', color='type').properties(width=225, height=225)
 
   chart = alt.vconcat()
 
