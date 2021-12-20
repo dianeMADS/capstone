@@ -236,7 +236,30 @@ def main():
       """The results of this analysis were not as consistent as we had hoped.  The most reliable results came from the Agglomerative clustering with the date averaging data representation.  The plot below shows the clusters for the date representation.  The agglomerative clustering algorithm is the only one that appears to have some consistency in its clusters.  DBSCAN was run using a wide range of values for the eps parameter but it was never able to identify more than one cluster and noise.  OPTICS consistently provided a noise group and one or two clusters.  There appears to be a difference between the two clusters in the timeseries, but it is not clear why the separation occurred.  Both groups appear to have significant noise and inconsistent measurement across the timeframe.  The spectral clustering algorithm continually failed to provide fully connected graphs and thus produced unreliable cluster groups.  Affinity propagation produced 22 clusters with both data representations.  It is unclear why so many groups were produced but some differences in the active timeframes for each node and spikes in gas concentrations may account for some of the variability. """
   )
    
-
+  def cluster_timeseries():
+    data = pd.read_csv('streamlit/data/clustered_dataset.csv')
+    cols = ['concentration_co', 'concentration_h2s', 'concentration_no2', 'concentration_o3', 'concentration_oxidizing_gases', 'concentration_reducing_gases', 'concentration_so2']
+    row = None
+    column = None
+    for i in ['Agglomerative','DBSCAN','OPTICS', 'Spectral','AffinityPropagation']:
+      row = None
+      for j in cols:
+        df = data.groupby(['date', i]).mean()[[j]].reset_index()
+        c = alt.Chart(df).mark_line().encode(
+            x=alt.X('date:T', title=''),
+            y=f'{j}:Q',
+            color=f'{i}:N'
+        ).properties(width=200)
+        if row == None:
+          row = c 
+        else:
+          row = row|c
+      if column == None:
+        column = row
+      else:
+        column = (column&row).resolve_scale(color='independent')
+    return column
+  st.altair_chart(cluster_timeseries)
   st.markdown(
       """For the agglomerative clustering, it appears that there are differences in the cluster groups that are clear in the average time series for each cluster especially between 2019 and 2020. The blue (0) cluster group has far greater variance than the orange (4) cluster.  We can also see that the blue cluster does not continue into 2021. In the map, we can see that most of the nodes belong to a single cluster.   The smallest clusters appear to be the least consistent sensors and have many data gaps or were only active for a short period of time. It appears that the clusters may have only separated based on measurement consistency.  Further analysis is required to understand why these nodes are producing noisier data.  It is unclear if this is due to a faulty sensor or if there are local sources of pollution that cause the spikes.  Future projects could compare these clusters to traffic patterns and industrial centers that could be producers.  It would also be beneficial to include more variables such as wind speed and direction that have an impact on the direction of pollution plume movement.  """
   )
