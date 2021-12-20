@@ -101,16 +101,16 @@ def main():
 
   "# might need a static image for folium and refer back to the notebook..."
 #   latlon = list(zip(nodes['lat'], nodes['lon'], node['node_id']))
-#   mapit = folium.Map( location=[41.85, -87.65], zoom_start=11 )
+  mapit = folium.Map( location=[41.85, -87.65], zoom_start=11 )
 
-#   for coord in latlon:
-#     folium.Marker( location=[ coord[0], coord[1] ],
-#                 tooltip=('node:', coord[2], 'lat:', coord[0], 'lon:', coord[1]),
-#                 #  tooltip = ''
-#                 popup=coord[2]).add_to( mapit )
+  for coord in latlon:
+    folium.Marker( location=[ coord[0], coord[1] ],
+                tooltip=('node:', coord[2], 'lat:', coord[0], 'lon:', coord[1]),
+                #  tooltip = ''
+                popup=coord[2]).add_to( mapit )
 
-#   folium.TileLayer('cartodbpositron').add_to(mapit)
-#   folium_static(mapit)
+  folium.TileLayer('cartodbpositron').add_to(mapit)
+  folium_static(mapit)
 
 
 
