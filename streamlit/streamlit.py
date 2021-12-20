@@ -79,11 +79,11 @@ def main():
   st.dataframe(master_df.head())
 
   st.markdown('nodes')
-  nodes = pd.read_csv("data/nodes.csv")
+  nodes = pd.read_csv("streamlit/data/nodes.csv")
   st.dataframe(nodes.head())
 
   st.markdown('sensors')
-  sensors = pd.read_csv('data/sensors.csv')
+  sensors = pd.read_csv('streamlit/data/sensors.csv')
   st.dataframe(sensors.head())
     
     
