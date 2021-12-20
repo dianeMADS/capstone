@@ -18,7 +18,7 @@ from PIL import Image
 
 import matplotlib.pyplot as plt
 import altair as alt
-# from streamlit_folium import folium_static
+from streamlit_folium import folium_static
 import folium
 import seaborn as sb
 
