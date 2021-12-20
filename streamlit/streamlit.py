@@ -215,7 +215,7 @@ def main():
   st.markdown(
       """We also ran an initial clustering analysis of the nodes based on the types of sensors at each location. A sparse matrix for each node with the sensor types as the values was used.  The sensor types were limited to only the subsystem types that include air quality metrics.  The histogram below shows the clusters identified using agglomerative clustering with a distance threshold of 15.  """
   )
-  st.image(Image.open("ExploratoryClusterCounts.jpg"))
+  st.image(Image.open("streamlit/data/ExploratoryClusterCounts.jpg"))
 
   st.markdown(
      '''The clustering shows that the concentrations of the gasses are well represented in the blue and red cluster groups.  The particle sizes are only represented in the red cluster group and appear at less than 30 nodes. Therefore, these metrics may not be appropriate for this analysis.  The image below shows the locations of these clusters.  We can see that group 1, represented in orange, covers much of the city but lacks the air quality sensors.  We still believe that the other clusters provide enough coverage of the city and will provide valid results.'''
