@@ -263,15 +263,17 @@ def main():
   st.header("Causal Inference Analysis")
 
   st.markdown(
-    """This causal inference analysis is to understand if the first COVID-19 lockdown in the city of Chicago, from March 21st to May 31st 2020, reduced pollution within the city."""
+    """This causal inference analysis is to understand if the first COVID-19 lockdown in the city of Chicago, from March 21st to May 31st 2020, reduced pollution within the city. As discussed in data wrangling section, limitations observed in our dataset pushed us to estimate pollution on the basis of air quality gazes only. Those gazes are co, h2s, no2, o3, oxydizing gaes, reducing gazes and so2."""
   )
+    
   st.markdown(
-    """As discussed in data wrangling section, limitations observed in our dataset pushed us to estimate pollution on the basis of air quality gazes only. Those gazes are co, h2s, no2, o3, oxydizing gaes, reducing gazes and so2."""
+    """On the other hand, note that we do not have two (control vs treatment) groups for the causal analysis since the study focuses on one city that cannot be simultaneously opened up and lockdown. In such cases, counterfactuals are required to determine, using robust predictions, what would have happened the unseen circumstance existed."""
   )
+
   
-  st.subheader('Dataset')
+  st.subheader('Data')
   st.markdown(
-      """*The following table shows a sample of the slice of data used for causal inference. Those are pivoted around parameters to have air quality gazes as features and measurements as observations."""
+      """The following table shows a sample of the slice of data used for causal inference. Those are pivoted around parameters to have air quality gazes as features and measurements as observations."""
   )
   df = filtered_subsystems[filtered_subsystems['parameters'] == 'concentration'].drop(['node_id', 'subsystem', 'parameters'], axis=1)
 #   st.dataframe(df.head())
@@ -280,12 +282,12 @@ def main():
   st.dataframe(df.head())
     
   st.markdown(
-    """*And here are some statistics around air gaze concentration timeseries."""
+    """Table below complements the previous one with some statistics around air gaze timeseries."""
   )
   st.dataframe(df.describe())
 
   st.markdown(
-    """*The following plots show historical trends for air quality gaze concentrations."""
+    """For illustration, here are some plots to show historical trends for air quality gaze concentrations. We see that data a really volatile, with some peaks that from our understanding correspond to moments when sensors were not functional."""
   )
   df.date = pd.to_datetime(df.date)
 
@@ -305,7 +307,11 @@ def main():
   st.altair_chart(chart)
  
 
-  st.markdown("""Analysis goal.""")
+  st.subheader("""Vector Autoregression (VAR) Model""")
+  st.markdown(
+      """."""
+  )
+ 
  
   training_df = df[df['date'] < '2020-01-01']
 #   training_df
@@ -419,11 +425,6 @@ def main():
 
   st.altair_chart(chart)
   
-
-  st.markdown(
-      """."""
-  )
- 
 
   st.markdown(
       """."""
