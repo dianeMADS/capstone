@@ -504,7 +504,7 @@ def main():
       """We both participated in the all ascpects of the projects, but James took the lead on data reduction & clustering analysis along with related sections of the report, as well as standup and final videos."""
   )
   
-  st.subheader("""James""")
+  st.subheader("""Diane""")
   st.markdown(
       """Diane proposed the dataset and was prime for data exploration & causal inference analysis along with related parts of the report; she also set up this streamlit blog."""
   )
