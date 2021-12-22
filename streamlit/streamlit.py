@@ -479,7 +479,7 @@ def main():
   st.image(Image.open('streamlit/data/AgglomerativeClusters.jpg'), caption='Agglomorative Clusters', width=500)
 
   
-  st.header("V. Conclusion and Possible Future Directions")
+  st.header("V. Possible Future Directions")
   st.markdown('\n\n')
   st.markdown(
       """This capstone is an attempt to determine the impact of COVID-19 lockdown on the air quality gaze concentrations, based on the analysis of Chicago AoT data. One of the biggest challenges was the volume of data that required around 400G of drive space for storing both downloaded zipped and later unzipped files. We also used some bash commands to get an initial view of the data and chunk the initial file into a set of 10G files, one per node. The node files were then reduced to a combined size of 1.8GB, using C# for parallelism and speed capabilities in the aggregation of measurements from seconds to hours. Resulting 1.8GB csv was readable into a Pandas dataframe. A through data exploration allowed us to understand date ranges and nested component relationships within the AoT nodes. We noticed some parameters duplicated from one subsystem to another, with mismatch values within the same given node. Project documentation does not provide enough information to reconcile those measurements; this would require digging deeper to the literature. An initial cluster analysis also showed that air quality particle counts were not present in many sensors. At this point, we decided to focus our analysis on air quality gazes that were provided by the same types of sensors."""
@@ -491,6 +491,22 @@ def main():
   st.markdown('\n\n')
   st.markdown(
       """In the future, it is necessary to refine our statistical error analysis for the Vector Autoregression to support or mitigate the conclusions of our causal analysis. Furthermore, we would like to implement a LSTM deep learning for more robust predictions in the causal inference analysis. We expect LSTM to better fit the volatile nature of air quality gazes observed in our analysis. Regarding clustering, we are curious to re-run the causal analysis pipeline for each of the clusters obtained with one of the algorithms implemented. From another perspective, we generally ignored many features present in the AoT dataset, such as wind and seasonal changes that might have an impact in both clustering and air quality. In future work, we would like to include more meteorological, environmental, and other physical timeseries. With such generalized study, it will be time to compare AoT data to outside metrics such as health, income and/or housing prices that can somehow relate to the quality of life. Finally, there is some background-related interest to completely shift this AoT analysis with different metrics including traffic patterns, noise and vibrations, or even network connectivity."""
+  )
+    
+  
+  st.markdown('\n\n')
+  st.markdown(
+      """It's been a pleasure to work on this capstone."""
+  )
+
+  st.subheader("""James""")
+  st.markdown(
+      """We both participated in the all ascpects of the projects, but James took the lead on data reduction & clustering analysis along with related sections of the report, as well as standup and final videos."""
+  )
+  
+  st.subheader("""James""")
+  st.markdown(
+      """Diane proposed the dataset and was prime for data exploration & causal inference analysis along with related parts of the report; she also set up this streamlit blog."""
   )
 
 
