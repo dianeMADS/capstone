@@ -43,7 +43,7 @@ def main():
   # "# MADS CAPSTONE, SIADS 697-698"
   st.header("MADS CAPSTONE, SIADS 697-698")
   # st.markdown('\n\n')
-  st.title("Covid-19 Lockdown and Pollution in the City of Chicago?")
+  st.title("Covid-19 Lockdown and Pollution in the City of Chicago")
   # st.markdown('\n\n')
   st.header("Diane O. and James N.")
   st.markdown('\n\n')
@@ -501,7 +501,7 @@ def main():
 
   st.subheader("""James""")
   st.markdown(
-      """We both participated in the all ascpects of the projects, but James took the lead on data reduction & clustering analysis along with related sections of the report, as well as standup and final videos."""
+      """We both participated in the all aspects of the projects, but James took the lead on data reduction & clustering analysis along with related sections of the report, as well as standup and final videos."""
   )
   
   st.subheader("""Diane""")
