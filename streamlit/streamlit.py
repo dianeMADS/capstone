@@ -25,8 +25,8 @@ import seaborn as sb
 from statsmodels.tsa.api import VAR
 from statsmodels.tsa.vector_ar.var_model import VARResults, VARResultsWrapper
 
-# from sklearn.metrics import mean_squared_error
-# from sklearn.metrics import mean_absolute_error
+# from scikit-learn.metrics import mean_squared_error
+# from scikit-learn.metrics import mean_absolute_error
 
  
 # # Suppress warnings
