@@ -457,7 +457,7 @@ def main():
     for i in ['Agglomerative','DBSCAN','OPTICS', 'Spectral','AffinityPropagation']:
       row = None
       for j in cols:
-        df = data.groupby(['date', i]).mean()[[j]].reset_index()
+        df = data.groupby(['date', i]).mean(numeric_only=True)[[j]].reset_index()
         c = alt.Chart(df).mark_line().encode(
             x=alt.X('date:T', title=''),
             y=f'{j}:Q',
