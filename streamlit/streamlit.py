@@ -376,7 +376,7 @@ def main():
   plot_df = validation_df.copy()
   plot_df['type'] = 'actual'
   pred_df['type'] = 'predictions'
-  plot_df = plot_df.append(pred_df)
+  plot_df = plot_df._append(pred_df)
 
   base = alt.Chart(plot_df).mark_line().encode(x = 'date:T', color='type').properties(width=225, height=225)
 
