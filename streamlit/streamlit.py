@@ -414,7 +414,7 @@ def main():
   causal_df = treatment_df.copy()
   causal_df['type'] = 'treatment'
   control_df['type'] = 'control'
-  causal_df = causal_df.append(control_df)
+  causal_df = causal_df._append(control_df)
 
   base = alt.Chart(causal_df).mark_line().encode(x = 'date:T', color='type').properties(width=225, height=225)
 
