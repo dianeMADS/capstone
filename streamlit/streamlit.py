@@ -133,7 +133,7 @@ def main():
     up_df.loc[idx] = [node, pd.to_datetime(sample.date).min(), pd.to_datetime(sample.date).max()]
     idx += 1
 
-  up_df['days_up'] = pd.to_datetime(up_df.end.dt.date - up_df.start.dt.date).dt.days
+  up_df['days_up'] = (pd.to_datetime(up_df.end.dt.date) - pd.to_datetime(up_df.start.dt.date)).dt.days
 #   st.dataframe(up_df.head())
 
 #   st.dataframe(up_df.describe().T)  
